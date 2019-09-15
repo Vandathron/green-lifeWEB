@@ -13,6 +13,9 @@ export class RoomsComponent implements OnInit {
   roomTypes = [
     "Single", "Double", "Triple", "Family"
   ];
+  emptyRooms = [];
+  bookedRoomNo;
+
   rooms = [];
   room = this.fb.group({
     roomNo: [null, [Validators.required]],
@@ -20,6 +23,10 @@ export class RoomsComponent implements OnInit {
   })
 
   bookForm = this.fb.group({
+    firstName: ['', [Validators.required]],
+    lastName: ['', [Validators.required]],
+    phone: [null, [Validators.required]],
+    email: [''],
     
   })
 
