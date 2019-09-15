@@ -1,0 +1,67 @@
+<h4 class="font-weight-bold">
+  Order
+  <button type="button" class="pull-right btn btn-primary mr-2" (click)="open(addItemModal, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; Add Item</button>
+  <button type="button" class="pull-right btn btn-primary" (click)="open(placeOrderModal, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; Place order</button>
+</h4>
+
+
+
+
+
+<!-- Modals Below -->
+
+<ng-template #addItemModal let-d = "dismiss" let-c="close">
+  <form [formGroup] = "orderForm" (ngSubmit) = "saveItem()">
+  <div class="card">
+    <div class="card-header">
+      New Item
+    </div>
+    <div class="card-body">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Item" formControlName="itemName">
+      </div>
+      <div class="form-group">
+        <input type="number" class = "form-control" placeholder="Price" formControlName="price">
+      </div>
+    </div>
+    <div class="card-footer">
+      <button class="btn btn-primary">Save</button>
+      <button class="btn btn-danger"(click)="dismissModal()">Cancel</button>
+    </div>
+  </div>
+</form>
+</ng-template>
+
+<!-- Place order modal -->
+
+<ng-template #placeOrderModal let-d ="dismiss" let-c ="close">
+  <form [formGroup] = "placeOrderForm" (ngSubmit) = "placeOrder()">
+    <div class="card">
+      <div class="card-header">
+        Place order
+        <button class="btn btn-primary" (click)="addItem()">Add item</button>
+      </div>
+      <div class="card-body">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Customer name" formControlName="customerName">
+        </div>
+        <div formArrayName="items" *ngFor="let item of placeOrderForm.get('items').controls; let i = index;"> 
+            <div class="row" [formGroupName] = "i">
+                <div class="col-6">
+                  <input type="text" class="form-control" placeholder="Item" formControlName="itemName">
+                </div>
+                <div class="col-6">
+                  <input type="number" class="form-control" placeholder="Price" formControlName="itemPrice">
+                </div>
+            </div>
+        </div>
+        
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-primary" (click)="placeOrder()">
+          Place order
+        </button>
+      </div>
+    </div>
+  </form>
+</ng-template>

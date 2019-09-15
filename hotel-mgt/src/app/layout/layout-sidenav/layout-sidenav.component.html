@@ -1,0 +1,33 @@
+<sidenav [orientation]="orientation" [ngClass]="getClasses()">
+
+  <!-- Inner -->
+  <div class="sidenav-inner" style="background-color:#a7ef8a; " [ngClass]="{ 'py-1': orientation !== 'horizontal' }">
+    <sidenav-menu icon="fa fa-tachometer" text="Dashboard">
+      <sidenav-router-link route="/v/admin/dashboard" [active]="isActive('/layout')">Admin</sidenav-router-link>
+    </sidenav-menu>
+    <sidenav-menu icon="fa fa-id-card" text="Admin">
+      <sidenav-router-link route="/v/admin/staffs" [active]="isActive('staff')">Staff</sidenav-router-link>
+      <sidenav-router-link route="/layout/roles" [active]="isActive('roles')">Roles</sidenav-router-link>
+      <sidenav-router-link route="/layout/roles" [active]="isActive('roles')">Report</sidenav-router-link>
+    </sidenav-menu>
+
+    <sidenav-menu icon="fa fa-gift" text="Restaurant">
+        <sidenav-router-link route="/v/admin/staffs" [active]="isActive('staff')">Staff</sidenav-router-link>
+
+    </sidenav-menu>
+    <sidenav-menu icon="fa fa-truck" text="Reception">
+        <sidenav-router-link route="/v/reception/guests">Guests</sidenav-router-link> 
+      <sidenav-router-link route="/v/reception/bookings" [active]="isActive('bookings')">Bookings</sidenav-router-link>
+      <sidenav-router-link route="/v/reception/rooms" [active]="isActive('rooms')">Rooms</sidenav-router-link>
+
+    </sidenav-menu>
+
+    <sidenav-router-link icon="fa fa-users" route="/layout/customers" [active]="isActive('/layout/customers')">Bar
+    </sidenav-router-link>
+    <!--End of code by Tosin-->
+    <sidenav-menu icon="fa fa-bar-chart" text="Reports">
+
+    </sidenav-menu>
+  </div>
+
+</sidenav>

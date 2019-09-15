@@ -1,0 +1,90 @@
+<h4 class="font-weight-bold">
+  Staffs
+  <button type="button" class="pull-right btn btn-primary" (click)="openNewStaff(newStaff, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; Add Staff</button>
+</h4>
+
+<div class="container">
+    <div class="row">
+        <div class="col col-3">
+          <div class="images-container text-center">
+            <h5>Vandathron</h5>
+            <img class="img-fluid" src="" alt="image here">
+          </div>
+        </div>
+        <div class="col col-3">
+      
+        </div>
+        <div class="col col-6">
+          <div class="row">
+            <div class="col col-6">
+              <h5>First name: </h5>
+            </div>
+            <div class="col col-6">
+              <h5>Last name: </h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-6">
+              <h5>Department: </h5>
+            </div>
+            <div class="col col-6">
+              <h5>Total sales: </h5>
+            </div>
+          </div>
+          <div class="row">
+            <button class="col btn btn-primary col-6">
+              Edit
+            </button>
+            <button class="col btn btn-danger col-6">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+</div>
+
+
+<!-- Modals below -->
+
+<!-- Add staff modals -->
+<ng-template #newStaff let-c="close" let-d="dismiss">
+  <form [formGroup] = "staffForm" (ngSubmit) = "addStaff()">
+      <div class="card">
+          <div class="card-header">
+            New staff
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <input type="text" placeholder="First name" class="form-control" formControlName="firstName">
+          </div>
+          <div class="form-group">
+            <input type="text" placeholder="Last name" class="form-control" formControlName="lastName">
+          </div>
+          <div class="form-group">
+              <ng-select [items]="departments" bindLabel = "name" [(ngModel)]="selectedDepartment" [ngModelOptions]="{standalone: true}"
+              placeholder="Select access">
+        
+              </ng-select>
+          </div>
+          <div class="form-group">
+            <input type="text" placeholder="Username" formControlName="username" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="email" placeholder="Email" formControlName="email" class="form-control">
+          </div>
+          <div class="form-group">
+            <input type="password" placeholder="Assign password" class="form-control" formControlName="password">
+          </div>
+          <div class="form-group">
+              <input type="number" placeholder="Phone number" class="form-control" formControlName="phone">
+            </div>
+        </div>
+        <div class="card-footer">
+          <button class="btn green pull-right" type="submit">
+            Add staff
+          </button>
+        </div>
+      </form>
+ 
+</ng-template>
