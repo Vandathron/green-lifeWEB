@@ -1,3 +1,27 @@
-<p>
-  booking works!
-</p>
+<h4 class="font-weight-bold">
+  Bookings
+  <button type="button" class="pull-right btn btn-primary" (click)="openModal(newGuest, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; Add booking</button>
+</h4>
+
+<div class="container-fluid table-responsive">
+  <table class="table table-hover table-dark">
+    <thead>
+      <tr>
+        <th>Guest</th>
+        <th>Room No.</th>
+        <th>Room type</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Amount</th>
+        <th>Payment type</th>
+        <th>Time to check-in</th>
+        <th>Checkout date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let guest of guests">
+        <td>{{guest.name}}</td><td>{{guest.roomNo}}</td><td>{{guest.phone}}</td><td>{{guest.email}}</td><td>{{guest.amount}}</td><td>{{guest.paymentType}}</td><td>{{guest.checkInTime}}</td><td>{{guest.checkOutTime}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

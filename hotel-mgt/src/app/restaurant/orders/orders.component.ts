@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormArray, FormControl } from '@angular/forms';
+import { OrderService } from '../../services/order.service';
+import { map } from 'rxjs/operators';
+import { IItem } from '../../models/Order';
+import { IGuest } from '../../models/guest';
+import { GuestService } from '../../services/guest.service';
 
 @Component({
   selector: 'app-orders',
@@ -9,9 +14,26 @@ import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 })
 export class OrdersComponent implements OnInit {
 
+  guestName: string  = "";
+  isBillPlaced: boolean = false;
+  savedItems: IItem[];
+  loaded: boolean = false;
+  orderIsByGuest: boolean;
+  placeOrders = [];
+
+
+
+  
+  guests = [];
+
+  selectedGuest = new FormControl(null, [Validators.required]);
+  
+  selectedItems = new FormControl();
+  orderedItems = [];
+
   orderForm = this.fb.group({
     itemName: ['', [Validators.required]],
-    price: [null, [Validators.required]]
+    itemPrice: [null, [Validators.required]]
   });
 
   placeOrderForm = this.fb.group({
@@ -22,15 +44,22 @@ export class OrdersComponent implements OnInit {
   items: FormArray;
   constructor(
     private modalService: NgbModal,
-    private fb: FormBuilder
-  ) { }
+    private fb: FormBuilder,
+    private orderService: OrderService, 
+    private guestService: GuestService
+  ) {
+    this.getItems();
+   }
 
   ngOnInit() {
+    this.loadGuests();
   }
 
-
   saveItem(){
-    console.log(this.orderForm.value);
+    this.orderService.addItem(this.orderForm.value).then(data => {
+      this.dismissModal();
+      this.getItems();
+    }).catch(err => console.log(err))
   }
   dismissModal(){
     this.modalService.dismissAll();
@@ -54,6 +83,43 @@ export class OrdersComponent implements OnInit {
 
   open(content,options){
     this.modalService.open(content, options);
+  }
+
+  addToOrderView(){
+    this.orderedItems = this.selectedItems.value;
+    
+  }
+
+  getItems(){
+    this.savedItems = [];
+    this.orderService.getItems().pipe(
+      map(changes => {
+        changes.map( data => {
+          const item = data.payload.doc.data() as IItem;
+          item.id = data.payload.doc.id;
+          console.log(item);
+          this.savedItems.push(item);
+        })
+        // this.loaded = true;
+      })
+    ).subscribe();
+  }
+
+  loadGuests(){
+    this.guestService.getGuests().pipe(
+      map(guests => {
+        guests.forEach(guest => {
+          const g = guest.data();
+          g.id = guest.id;
+          this.guests.push(g);
+        });
+      })
+    ).subscribe();
+  }
+
+
+  printOrder(){
+
   }
 
 

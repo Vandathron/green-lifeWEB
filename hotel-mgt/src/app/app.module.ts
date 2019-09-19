@@ -39,7 +39,8 @@ import { AngularmaterialModule } from "./material/angularmaterial/angularmateria
 import { LoginComponent } from './login/login.component';
 import { AuthService } from "./services/auth.service";
 import { AngularFireAuthModule } from "@angular/fire/auth";
-import { AngularFirestore, AngularFirestoreModule } from "@angular/fire/firestore";
+import {  AngularFirestoreModule } from "@angular/fire/firestore";
+import { StaffService } from "./services/staff.service";
 
 
 
@@ -58,10 +59,12 @@ import { AngularFirestore, AngularFirestoreModule } from "@angular/fire/firestor
     BrowserModule,
     NgbModule.forRoot(),
     AngularFireModule,
-    AngularFireModule.initializeApp(environment.firebase),
     AngularFireStorageModule,
     AngularFireAuthModule,
     AngularFirestoreModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    
+
     NgxChartsModule,
     PerfectScrollbarModule,
     HttpClientModule,
@@ -87,8 +90,8 @@ import { AngularFirestore, AngularFirestoreModule } from "@angular/fire/firestor
   providers: [
     Title,
     AppService,
-    AuthService
-
+    AuthService,
+    StaffService
   ],
 
   bootstrap: [

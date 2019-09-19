@@ -3,6 +3,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators } from '@angular/forms';
 import { IGuest } from '../../models/guest';
 import { MatTableDataSource } from '@angular/material';
+import { RoomService } from '../../services/room.service';
+import { map } from 'rxjs/operators';
+import { GuestService } from '../../services/guest.service';
 
 @Component({
   selector: 'app-guest',
@@ -30,18 +33,15 @@ export class GuestComponent implements OnInit, AfterViewInit {
   emptyRooms = [];
   guestTableData;
  
-
-
   //Tables
-  guest: IGuest[] = [];
-  displayedCols: string[] = ["name", "phone", "email", "checkInTime", "checkOutTime", "roomNo", "paid", ]
+  guests: IGuest[] = [];
   
   constructor(
     private modalService: NgbModal,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private roomService: RoomService,
+    private guestService: GuestService
   ) { }
-
-
 
   guestForm = this.fb.group({
     name: ['', [Validators.required]],
@@ -51,12 +51,11 @@ export class GuestComponent implements OnInit, AfterViewInit {
     roomNo: [null, [Validators.required]],
     checkInTime: ['', [Validators.required]],
     checkOutTime: ['', [Validators.required]],
-    paid: [false]
+    roomID: [null, [Validators.required]]
   });
 
 
   ngOnInit() {
-  this.guestTableData = new MatTableDataSource(this.guest);
 
   }
   ngAfterViewInit(): void {
@@ -65,11 +64,26 @@ export class GuestComponent implements OnInit, AfterViewInit {
     
   }
 
-  openModal(content, options){
-    this.modalService.open(content, options);
+  saveGuest(){
+    this.guestForm.addControl('amount', this.fb.control(this.guestForm.get('')))
+    this.guestService.saveGuest(this.guestForm.value).then(cb => {
+      console.log(cb);
+    }).catch(err => console.log("Error"+err))
   }
 
-  applyFilter(filterValue){
-    this.guestTableData.filter = filterValue.trim().toLowerCase();
+  openModal(content, options){
+    this.modalService.open(content, options);
+    this.roomService.getRooms().pipe(
+      map(rooms => {
+        rooms.forEach(roomDoc => {
+          const room = roomDoc.data();
+          room.id = roomDoc.id;
+          this.emptyRooms.push(room);
+        })
+      })
+    ).subscribe();
   }
+
+
+
 }

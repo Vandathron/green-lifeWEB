@@ -3,6 +3,7 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { FirebaseError } from 'firebase';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { IUser } from '../models/user';
 
 @Component({
   selector: 'app-login',
@@ -30,16 +31,24 @@ export class LoginComponent implements OnInit {
     this.loginError = false;
     this.authService.login(this.username, this.password)
     .then(success => { 
-      console.log(success);
        this.fireDB.collection('staffs').doc(success.user.uid).get()
        .subscribe(data => {
-         loggedInStaff = data.data();
-         console.log(loggedInStaff);
-         if(loggedInStaff.department == "reception"){
-           this.router.navigateByUrl("v/reception/guests")
-         }
-         if(loggedInStaff.department == "admin"){
-           this.router.navigateByUrl("v/admin").then(suc => console.log("Navigated successful", suc)).catch(err => console.log("INvalid route"))
+         loggedInStaff = data.data() as IUser;
+         loggedInStaff.id = success.user.uid;
+         localStorage.setItem("LoggedInUser", JSON.stringify(loggedInStaff))
+         switch(loggedInStaff.department){
+           case "reception": 
+                this.router.navigateByUrl("v/reception");
+                break;
+          case "restaurant":
+                this.router.navigateByUrl("v/restaurant");
+                break;
+          case "bar":
+                this.router.navigateByUrl("v/bar");
+                break;
+          case "admin":
+                this.router.navigateByUrl("v/admin");
+                break;
          }
        })
       

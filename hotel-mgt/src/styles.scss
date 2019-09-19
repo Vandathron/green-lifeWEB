@@ -1,4 +1,10 @@
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
+@import "../node_modules/@ng-select/ng-select/themes/material.theme.css";
+
+.cdk-overlay-connected-position-bounding-box {
+  z-index: 99999 !important;
+}
+.cdk-global-overlay-wrapper, .cdk-overlay-container { z-index: 9999!important; } 
 
 @mixin keyframes($name) {
   @-webkit-keyframes #{$name} {

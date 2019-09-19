@@ -4,6 +4,8 @@ export interface IUser {
     department: string;
     phone: number;
     email: string;
-    password: string;
     username: string;
+    totalSale?: number;
+    id?: string;
+    password?: string;
 }

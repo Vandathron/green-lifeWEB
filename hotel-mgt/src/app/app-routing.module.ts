@@ -36,9 +36,10 @@ const routes: Routes = [
 {
   path: 'login', component: LoginComponent
 },
-  {
-    path: '', redirectTo: 'v/admin', pathMatch: 'full'
-  }
+{
+  path: '', redirectTo: 'login', pathMatch: 'full'
+}
+  
 
 ];
 

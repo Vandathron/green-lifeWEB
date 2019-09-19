@@ -1,47 +1,54 @@
 <div class="container-fluid">
-  <h4 class="font-weight-bold">
+  <h2 class="font-weight-bold"><i class="fa fa-bed fa-2x"></i>
     Rooms
     <button type="button" class="pull-right btn btn-primary mr-2" (click)="open(newRoomModal, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; New room</button>
     <button type="button" class="pull-right btn btn-primary mr-2" (click)="open(bookModal, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; Book</button>
-  </h4>
-
+  </h2>
 
   <div class="row border-0">
     <div class="col-3 card border-0 p-0">
       <div class="card-header text-dark p-0 border-0">
-        <span>Room 34</span><span class="pull-right mr-1">Taken</span>
+        <span class="ml-1">Room 34</span><span class="pull-right mr-1">Taken</span>
       </div>
       <div class="card-body text-center text-dark">
         <i class="fa fa-user-circle fa-3x"></i><span class="name">Akinnagbe Tosin</span>
       </div>
-      <div class="footer p-1 text-dark">
-        <i class="fa fa-2x fa-calendar"></i>2 days<i class="ml-2 fa-2x fa fa-check-circle"></i>
+      <div class="footer p-1 text-dark d-inline-flex">
+        <i class="fa fa-2x fa-calendar"></i><h3 class="ml-2">2 days</h3><i class="ml-2 fa-2x fa fa-check-circle"></i>
       </div>
     </div>
-    
 
   </div>
 <ng-template #newRoomModal let-c = "close" let-d="dismiss">
-  <form [formGroup] = "room" (ngSubmit)="saveRoom()">
     <div class="card">
       <div class="card-header">
         New room
       </div>
       <div class="card-body">
-        <div class="form-group">
+      <form [formGroup] = "room" (ngSubmit)="saveRoom()">
+        <div class="form-group">  
           <input type="number" class="form-control" placeholder="Room no" formControlName="roomNo">
         </div>
         <div class= "form-group">
-          <ng-select [items]="roomTypes" bindLabel = "name" [(ngModel)]="selectedRoomType" [ngModelOptions]="{standalone: true}">
+          <ng-select [items]="roomTypes" bindLabel = "name" [(ngModel)]="selectedRoomType" [ngModelOptions]="{standalone: true}" placeholder= "Room type">
 
           </ng-select>
         </div>
         <div class="form-group">
           <input type="number" class="form-control" placeholder="Price" formControlName="roomPrice">
         </div>
+        <div class="form-group">
+          <mat-radio-group formControlName="status">
+            <mat-radio-button value="available">Available</mat-radio-button>
+            <mat-radio-button value="unavailabe">Unavailable</mat-radio-button>
+            <mat-radio-button value="booked">Booked</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <button class="btn btn-primary pull-right" type="submit">Add room</button>
+        <button type="button" (click)="closeModal()" class="btn btn-danger pull-right">Cancel</button>
+    </form>
       </div>
-    </div>
-  </form>
+</div>
 </ng-template>
 
 <ng-template #bookModal let-c = "close" let-d="dismiss">
@@ -73,9 +80,10 @@
           <input type="datetime" placeholder="Check out time" class="form-control col-6" formControlName="checkOutTime">
     </div>
     <div class="form-group">
-      <ng-select [items]="emptyRooms" bindLabel="" [(ngModel)]="bookRoomNo" placeholder="Assign room"></ng-select>
+      <ng-select [items]="emptyRooms" bindLabel="" [(ngModel)]="bookedRoomNo" placeholder="Assign room" [ngModelOptions] = "{standalone: true}"></ng-select>
     </div>
-        <button type="submit" class="btn btn-primary">Book</button>
+    <button type="submit" class="btn btn-primary pull-right">Book</button>
+        <button type="button" (click)="closeModal()" class="btn btn-danger pull-right">Cancel</button>
       </form>
     </div>
   </div>

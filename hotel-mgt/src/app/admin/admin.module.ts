@@ -11,9 +11,11 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 import { NouisliderModule } from 'ng2-nouislider';
 import { Ng2DropdownModule } from 'ng2-material-dropdown';
+import { ReportsComponent } from './reports/reports.component';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 @NgModule({
-  declarations: [DashboardComponent, StaffComponent],
+  declarations: [DashboardComponent, StaffComponent, ReportsComponent],
   imports: [
     CommonModule,
     AngularmaterialModule,
@@ -21,9 +23,11 @@ import { Ng2DropdownModule } from 'ng2-material-dropdown';
     FormsModule,
     AdminRoutingModule,
     NgbModule,
+    AngularFirestoreModule,
+    NgbModule.forRoot(),
+    NgSelectModule,
     SweetAlert2Module.forRoot(),
     NouisliderModule,
-    NgSelectModule,
     Ng2DropdownModule
     
   ]

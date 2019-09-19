@@ -5,7 +5,87 @@
 </h4>
 
 
+<div class="container-fluid mt-5">
+  <div class="row">
+    <div class="col-lg-8">
+      <mat-form-field>
+          <mat-label>Select orders</mat-label>
+          <mat-select multiple [formControl] = "selectedItems" >
+            <mat-option *ngFor="let item of savedItems" [value]="item" >
+              {{item.itemName}}/{{item.itemPrice}}
+            </mat-option>
+          </mat-select>
+      </mat-form-field>
+      <div>
+          <mat-radio-group [(ngModel)]="orderIsByGuest" style="width: 100%;">
+              <mat-radio-button [value]='true'>In house guest</mat-radio-button>
+              <mat-radio-button [value]='false'>Others</mat-radio-button>
+          </mat-radio-group>
+      </div>
 
+      <div *ngIf="orderIsByGuest">
+          <mat-form-field>
+              <mat-label>Choose guest</mat-label>
+              <mat-select [formControl]="selectedGuest">
+                <mat-option *ngFor="let guest of guests" [value]="guest">
+                  {{guest.name}}/ Room {{guest.roomNo}}
+                </mat-option>
+              </mat-select>
+          </mat-form-field>
+          <div>
+              <mat-checkbox [value]="isBillPlaced">
+              Place on bill
+          </mat-checkbox>
+          </div>
+      </div>
+      <div class="form-group" *ngIf="!orderIsByGuest">
+        <input type="text" class="form-control" placeholder="Name on docket" [(ngModel)]="guestName">
+      </div>
+
+      <div class="row">
+        <button class="col-12 btn btn-dark" (click)="addToOrderView()">
+          Place order
+        </button>
+      </div>
+    </div>
+
+    <div class="col-lg-4 border border-1 table-responsive">
+      <div class="container p-3 text-center">
+      Order by {{orderIsByGuest? selectedGuest.value.name +" in room "+selectedGuest.value.roomNo  : guestName}}
+    </div>
+      <table class="table-borderless table">
+        <thead>
+          <tr>
+            <th>Item</th><th>Price</th><th>Qty.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ordered of selectedItems.value">
+            <td>{{ordered.itemName}}</td><td>{{ordered.itemPrice}}</td><td><input type="number" class="form-control" value="1" style="max-width: 50px;"></td><span><i class=" fa fa-trash fa-2x"></i></span>
+          </tr>
+        </tbody>
+      </table>
+      <div class="row">
+          <button class="btn col-12 align-self-center btn-dark" (click) = "printOrder()">Check out/Pay</button>
+      </div>
+    </div>
+  </div>
+
+    <div class="table-responsive mt-4">
+      <table class="table table-hover table-dark">
+        <thead>
+          <tr>
+            <th>Item</th><th>Price</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of savedItems">
+            <td>{{item.itemName}}</td><td>{{item.itemPrice}}</td><td><i class="fa fa-trash"></i></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</div>
 
 
 <!-- Modals Below -->
@@ -21,7 +101,7 @@
         <input type="text" class="form-control" placeholder="Item" formControlName="itemName">
       </div>
       <div class="form-group">
-        <input type="number" class = "form-control" placeholder="Price" formControlName="price">
+        <input type="number" class = "form-control" placeholder="Price" formControlName="itemPrice">
       </div>
     </div>
     <div class="card-footer">

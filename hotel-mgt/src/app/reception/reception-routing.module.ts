@@ -13,6 +13,9 @@ const routes: Routes = [
   },
   {
     path: "guests", component: GuestComponent
+  },
+  {
+    path: '', redirectTo: 'guests'
   }
 ];
 

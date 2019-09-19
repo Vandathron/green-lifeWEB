@@ -4,10 +4,13 @@ export interface IGuest {
     email: string;
     paymentType: string;
     roomNo: number;
+    roomType: string;
     checkInTime: string;
     checkOutTime: string;
     amount: number;
-    paid: boolean;
-    id: number;
+    roomID: string;
 }
 
+export interface IGuestOrder{
+
+}

@@ -4,10 +4,10 @@ import { OrdersComponent } from './orders/orders.component';
 
 const routes: Routes = [
   {
-    path: 'orders', component:OrdersComponent,
+    path: 'rest-pos', component:OrdersComponent,
   },
   {
-    path: '', redirectTo: 'orders', pathMatch: 'full'
+    path: '', redirectTo: 'rest-pos', pathMatch: 'full'
   }
 ];
 

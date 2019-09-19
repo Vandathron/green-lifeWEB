@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StaffService } from '../../services/staff.service';
+import { IUser } from '../../models/user';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-staff',
@@ -13,6 +15,8 @@ export class StaffComponent implements OnInit {
   selectedDepartment;
    departments = ["admin", "reception", "restaurant", "bar"
   ];
+
+  staffs: IUser[] = [];
 
   staffForm = this.fb.group({
     firstName: ['', [Validators.required]],
@@ -27,7 +31,9 @@ export class StaffComponent implements OnInit {
     private fb: FormBuilder,
     private modalService: NgbModal,
     private staffService: StaffService
-  ) { }
+  ) { 
+    this.getStaffs();
+  }
 
   ngOnInit() {
   }
@@ -40,7 +46,24 @@ export class StaffComponent implements OnInit {
   addStaff(){
     this.staffForm.addControl('department', this.fb.control(this.selectedDepartment))
     this.staffService.saveStaff(this.staffForm.value)
-    .then(suc => console.log("Saved successfully", suc))
+    .then(suc => {
+      this.modalService.dismissAll();
+      this.staffForm.removeControl('department');
+      this.staffForm.reset();
+      this.getStaffs();
+    })
+  }
+  getStaffs(){
+    this.staffs = [];
+    this.staffService.getStaffs().pipe(
+      map(changes => {
+        return changes.map(staffs => {
+          const data = staffs.payload.doc.data() as IUser;
+          data.id = staffs.payload.doc.id;
+          this.staffs.push(data);
+        })
+      })
+    ).subscribe();
   }
 
 }

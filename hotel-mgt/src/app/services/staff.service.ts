@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireDatabase, snapshotChanges } from '@angular/fire/database';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { IUser } from '../models/user';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection} from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import {map} from 'rxjs/operators'
 
 @Injectable({
   providedIn: 'root'
@@ -24,9 +26,12 @@ export class StaffService {
         department: staff.department,
         phone: staff.phone,
         email: staff.email,
-        password: staff.password,
         username: staff.username
       })
     })
+  }
+
+  getStaffs(){
+     return this.fireDB.collection("staffs").snapshotChanges();
   }
 }

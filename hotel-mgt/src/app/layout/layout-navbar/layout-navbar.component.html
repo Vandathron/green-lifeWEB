@@ -21,7 +21,7 @@
    <div class="navbar-nav float-right">
           <a class="nav-item nav-link" href="javascript:void(0)"><i class="fa fa-envelope fa-2x"></i><span clas s="badge badge-dot badge-primary indicator"></span></a>
           <div ngbDropdown hoverDropdown [placement]="isRTL ? 'bottom-right' : 'bottom-left'">
-          <a class="nav-item nav-link dropdown-toggle" ngbDropdownToggle><i class="fa fa-user fa-2x"></i></a>
+          <a class="nav-item nav-link dropdown-toggle" ngbDropdownToggle><i class="fa fa-user fa-2x"></i>{{user.username}}</a>
           <div ngbDropdownMenu [class.dropdown-menu-right]="isRTL">
 		     <a class="dropdown-item" (click)="goToProfile()">My Profile</a>
             <a class="dropdown-item" (click)="onlogout()">Logout</a>

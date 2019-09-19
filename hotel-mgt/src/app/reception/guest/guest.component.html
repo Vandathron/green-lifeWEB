@@ -3,61 +3,62 @@
   <button type="button" class="pull-right btn btn-primary" (click)="openModal(newGuest, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; Add guest</button>
 </h4>
 
-<div class="container">
-    <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-      </mat-form-field>
-      
-      <table mat-table [dataSource]="guestTableData" class="mat-elevation-z8">
-      
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> Name </th>
-          <td mat-cell *matCellDef="let guest"> {{guest.name}} </td>
-        </ng-container>
-      
-        <!-- Name Column -->
-        <ng-container matColumnDef="phone">
-          <th mat-header-cell *matHeaderCellDef> Phone </th>
-          <td mat-cell *matCellDef="let guest"> {{guest.phone}} </td>
-        </ng-container>
-      
-        <!-- Weight Column -->
-        <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef> Email </th>
-          <td mat-cell *matCellDef="let guest"> {{guest.email}} </td>
-        </ng-container>
-      
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="checkInTime">
-          <th mat-header-cell *matHeaderCellDef> Date checked In </th>
-          <td mat-cell *matCellDef="let guest"> {{guest.checkInTime}} </td>
-        </ng-container>
+<div class="container-fluid table-responsive">
+  <h3>Checked in guest</h3>
+  <table class="table table-hover table-dark">
+    <thead>
+      <tr>
+        <th>Guest</th>
+        <th>Room No.</th>
+        <th>Room type</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Amount</th>
+        <th>Payment type</th>
+        <th>Check in time</th>
+        <th>Check out time</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let guest of guests">
+        <td>{{guest.name}}</td><td>{{guest.roomNo}}</td><td>{{guest.roomType}}</td><td>{{guest.phone}}</td><td>{{guest.email}}</td><td>{{guest.amount}}</td><td>{{guest.paymentType}}</td><td>{{guest.checkInTime}}</td><td>{{guest.checkOutTime}}</td>
+        <td><button type="button" class="btn-danger btn">Checkout</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-        <ng-container matColumnDef="checkOutTime">
-            <th mat-header-cell *matHeaderCellDef> Date checked out </th>
-            <td mat-cell *matCellDef="let guest"> {{guest.checkOutTime}} </td>
-          </ng-container>
-        
-        <ng-container matColumnDef="roomNo">
-            <th mat-header-cell *matHeaderCellDef> Room No. </th>
-            <td mat-cell *matCellDef="let guest"> {{guest.roomNo}} </td>
-        </ng-container>
-        <ng-container matColumnDef="paid">
-              <th mat-header-cell *matHeaderCellDef> Bill </th>
-              <td mat-cell *matCellDef="let guest"> {{guest.paid}} </td>
-        </ng-container>
-      
-        <tr mat-header-row *matHeaderRowDef="displayedCols"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedCols;"></tr>
-      </table>
+<div class="container-fluid table-responsive">
+  <h3>Booked guests</h3>
+  <table class="table table-hover table-dark">
+    <thead>
+      <tr>
+        <th>Guest</th>
+        <th>Room No.</th>
+        <th>Room type</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Amount</th>
+        <th>Payment type</th>
+        <th>Check in time</th>
+        <th>Check out time</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let guest of guests">
+        <td>{{guest.name}}</td><td>{{guest.roomNo}}</td><td>{{guest.roomType}}</td><td>{{guest.phone}}</td><td>{{guest.email}}</td><td>{{guest.amount}}</td><td>{{guest.paymentType}}</td><td>{{guest.checkInTime}}</td><td>{{guest.checkOutTime}}</td><td><button type="button" class="btn btn-danger">Cancel booking</button></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <!-- Modals below  -->
 <!-- New guest form -->
 
 <ng-template #newGuest>
-  <form [formGroup] = "guestForm">
+  <form [formGroup] = "guestForm" (ngSubmit)="saveGuest()">
     <div class="card">
       <div class="card-header">
         New guest
@@ -65,40 +66,52 @@
       <div class="card-body">
         <div class="row">
             <div class="form-group col-6">
-                <input type="text" placeholder="name" formControlName="name">
+                <input type="text" placeholder="name" class="form-control" formControlName="name" >
               </div>
               <div class="form-group col-6">
-                <input type="number" placeholder="Phone" formControlName="phone">
+                <input type="number" placeholder="Phone" class="form-control" formControlName="phone">
               </div>
         </div>
         <div class="row">
-            <div class="form-group col-6">
-                <input type="text" placeholder="Email" formControlName="email">
+            <div class=" col-6">
+                <input type="text" placeholder="Email" class="form-control" formControlName="email">
               </div>
               <div class="form-group col-6">
-                <ng-select [items]="paymentTypes" bindLabel="name" [(ngModel)]="selectedPaymentType">
-
-                </ng-select>
+                  <mat-form-field>
+                      <mat-label>Payment type</mat-label>
+                      <mat-select formControlName = "paymentType">
+                        <mat-option *ngFor="let payment of paymentTypes" [value]="payment.name" >
+                          {{payment.name}}
+                        </mat-option>
+                      </mat-select>
+                  </mat-form-field>
               </div>
         </div>
         <div class="row">
-            <div class="form-group col-6">
-                <ng-select [items]="emptyRooms" bindLabel="name" [(ngModel)]="selectedRoom">
-
-                </ng-select>
+            <div class=" col-6">
+              <mat-form-field>
+                  <mat-label>Available rooms</mat-label>
+                  <mat-select formControlName = "roomID" >
+                    <mat-option *ngFor="let room of emptyRooms" [value]="room.id" >
+                      {{room.roomNo}}/{{room.roomType}}/{{room.roomPrice}}
+                    </mat-option>
+                  </mat-select>
+              </mat-form-field>
             </div>
               <div class="form-group col-6">
-                <input type="datetime" placeholder="Checkin time" formControlName="checkInTime">
+                <input type="date" placeholder="Checkin time" class="form-control" formControlName="checkInTime">
               </div>
         </div>
         <div class="row">
             <div class="form-group col-6">
-                <input type="datetime" placeholder="Checkout time" formControlName="checkOutTime">
+                <input type="date" placeholder="Checkout time" class="form-control" formControlName="checkOutTime">
             </div>
             <div class="col-6">
-                <mat-checkbox formControlName="paid" >Paid</mat-checkbox>
+                <mat-checkbox  >Checked in</mat-checkbox>
+                <mat-checkbox  >Booked</mat-checkbox>
             </div>
         </div>
+        <button class="btn btn-primary pull-right" type="submit">Save guest</button>
       </div>
     </div>
   </form>
