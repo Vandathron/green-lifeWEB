@@ -19,5 +19,9 @@ export class RoomService {
     return this.fireDB.collection("rooms").get();
   }
 
+  filterRooms(property: string, value: string){
+    return this.fireDB.firestore.collection("rooms").where(property, "==" , value);
+  }
+
   
 }

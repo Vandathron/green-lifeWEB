@@ -1,3 +1,18 @@
-<p>
-  recep-report works!
-</p>
+<h4 class="font-weight-bold">
+  My daily report
+</h4>
+
+<div class="table-responsive">
+  <table class="table table-dark table-hover">
+    <thead>
+      <tr>
+        <th>Guest</th><th>Check in</th><th>Check out</th><th>Amount</th><th>Outstanding</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let guest of guests">
+        <!-- <td>{{}}</td> -->
+      </tr>
+    </tbody>
+  </table>
+</div>

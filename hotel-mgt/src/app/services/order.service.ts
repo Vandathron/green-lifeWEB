@@ -19,4 +19,8 @@ export class OrderService {
   getItems(){
     return this.fireStore.collection('restaurant-items').snapshotChanges();
   }
+
+  deleteItem(item){
+    return this.fireStore.collection("restaurant-items").doc(item.id).delete();
+  }
 }

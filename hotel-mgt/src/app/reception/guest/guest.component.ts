@@ -51,7 +51,8 @@ export class GuestComponent implements OnInit, AfterViewInit {
     roomNo: [null, [Validators.required]],
     checkInTime: ['', [Validators.required]],
     checkOutTime: ['', [Validators.required]],
-    roomID: [null, [Validators.required]]
+    roomID: [null, [Validators.required]],
+    status: [null, [Validators.required]]
   });
 
 
@@ -73,15 +74,16 @@ export class GuestComponent implements OnInit, AfterViewInit {
 
   openModal(content, options){
     this.modalService.open(content, options);
-    this.roomService.getRooms().pipe(
-      map(rooms => {
-        rooms.forEach(roomDoc => {
-          const room = roomDoc.data();
-          room.id = roomDoc.id;
-          this.emptyRooms.push(room);
-        })
+    this.roomService.filterRooms("status",  "available")
+    .get().then(rooms => {
+      console.log(rooms.docs)
+      rooms.forEach((room: any) => {
+        console.log(room);
+        const r = room.data;
+        r.id = room.id;
+        this.emptyRooms.push(r);
       })
-    ).subscribe();
+    }).catch(err => console.log("Error ", err))
   }
 
 

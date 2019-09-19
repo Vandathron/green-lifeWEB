@@ -19,7 +19,7 @@
       <div>
           <mat-radio-group [(ngModel)]="orderIsByGuest" style="width: 100%;">
               <mat-radio-button [value]='true'>In house guest</mat-radio-button>
-              <mat-radio-button [value]='false'>Others</mat-radio-button>
+              <mat-radio-button [value]='false' checked>Others</mat-radio-button>
           </mat-radio-group>
       </div>
 
@@ -80,7 +80,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of savedItems">
-            <td>{{item.itemName}}</td><td>{{item.itemPrice}}</td><td><i class="fa fa-trash"></i></td>
+            <td>{{item.itemName}}</td><td>{{item.itemPrice}}</td><td><i class="fa fa-trash" (click)="deleteSavedItem(item)"></i></td>
           </tr>
         </tbody>
       </table>

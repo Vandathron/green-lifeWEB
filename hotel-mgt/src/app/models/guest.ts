@@ -7,7 +7,6 @@ export interface IGuest {
     roomType: string;
     checkInTime: string;
     checkOutTime: string;
-    amount: number;
     roomID: string;
 }
 

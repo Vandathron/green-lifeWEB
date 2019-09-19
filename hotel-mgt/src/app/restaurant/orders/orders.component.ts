@@ -122,6 +122,12 @@ export class OrdersComponent implements OnInit {
 
   }
 
+  deleteSavedItem(item){
+    this.orderService.deleteItem(item.id)
+    .then(cb => console.log("Successfully deleted " +cb))
+    .catch(err => console.log("Error deleting", err));
+  }
+
 
 
 }
