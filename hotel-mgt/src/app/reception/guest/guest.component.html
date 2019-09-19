@@ -21,8 +21,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let guest of guests">
-        <td>{{guest.name}}</td><td>{{guest.roomNo}}</td><td>{{guest.roomType}}</td><td>{{guest.phone}}</td><td>{{guest.email}}</td><td>{{guest.amount}}</td><td>{{guest.paymentType}}</td><td>{{guest.checkInTime}}</td><td>{{guest.checkOutTime}}</td>
+      <tr *ngFor="let guest of checkInGuest">
+        <td>{{guest.name}}</td><td>{{guest.roomInfo.roomNo}}</td><td>{{guest.roomInfo.roomType}}</td><td>{{guest.phone}}</td><td>{{guest.email}}</td><td>{{guest.roomInfo.roomPrice}}</td><td>{{guest.paymentType}}</td><td>{{guest.checkInTime}}</td><td>{{guest.checkOutTime}}</td>
         <td><button type="button" class="btn-danger btn">Checkout</button></td>
       </tr>
     </tbody>
@@ -47,8 +47,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let guest of guests">
-        <td>{{guest.name}}</td><td>{{guest.roomNo}}</td><td>{{guest.roomType}}</td><td>{{guest.phone}}</td><td>{{guest.email}}</td><td>{{guest.amount}}</td><td>{{guest.paymentType}}</td><td>{{guest.checkInTime}}</td><td>{{guest.checkOutTime}}</td><td><button type="button" class="btn btn-danger">Cancel booking</button></td>
+      <tr *ngFor="let guest of bookedGuest">
+        <td>{{guest.name}}</td><td>{{guest.roomInfo.roomNo}}</td><td>{{guest.roomInfo.roomType}}</td><td>{{guest.phone}}</td><td>{{guest.email}}</td><td>{{guest.roomInfo.roomPrice}}</td><td>{{guest.paymentType}}</td><td>{{guest.checkInTime}}</td><td>{{guest.checkOutTime}}</td><td><button type="button" class="btn btn-danger">Cancel booking</button></td>
       </tr>
     </tbody>
   </table>
@@ -93,7 +93,7 @@
                   <mat-label>Available rooms</mat-label>
                   <mat-select formControlName = "roomID" >
                     <mat-option *ngFor="let room of emptyRooms" [value]="room.id" >
-                      {{room.roomNo}}/{{room.roomType}}/{{room.roomPrice}}
+                      {{room.roomNo}} | {{room.roomType}} | {{room.roomPrice}}
                     </mat-option>
                   </mat-select>
               </mat-form-field>
@@ -107,10 +107,13 @@
                 <input type="date" placeholder="Checkout time" class="form-control" formControlName="checkOutTime">
             </div>
             <div class="col-6">
-                <mat-select formControlName = "status">
-                  <mat-option [value]="checkedin">Check in</mat-option>
-                  <mat-option [value]="booked">Book</mat-option>
-                </mat-select>
+              <mat-form-field>
+                  <mat-label>Type</mat-label>
+                  <mat-select formControlName = "status">
+                    <mat-option value="checkedin">Check in</mat-option>
+                    <mat-option value="booked">Book</mat-option>
+                  </mat-select>
+              </mat-form-field>
             </div>
         </div>
         <button class="btn btn-primary pull-right" type="submit">Save guest</button>

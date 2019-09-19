@@ -7,6 +7,8 @@ import { IRoom } from '../models/room';
 })
 export class RoomService {
 
+  
+
   constructor(
     private fireDB: AngularFirestore
   ) { }
@@ -21,6 +23,14 @@ export class RoomService {
 
   filterRooms(property: string, value: string){
     return this.fireDB.firestore.collection("rooms").where(property, "==" , value);
+  }
+
+  updateRoom(roomID: string, data: {}){
+    return this.fireDB.collection("rooms").doc(roomID).update(data);
+  }
+
+  getRoom(roomID: string){
+    return this.fireDB.collection("rooms").doc(roomID).get();
   }
 
   

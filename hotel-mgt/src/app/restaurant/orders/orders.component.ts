@@ -15,7 +15,7 @@ import { GuestService } from '../../services/guest.service';
 export class OrdersComponent implements OnInit {
 
   guestName: string  = "";
-  isBillPlaced: boolean = false;
+  isBillPlaced: boolean = true;
   savedItems: IItem[];
   loaded: boolean = false;
   orderIsByGuest: boolean;

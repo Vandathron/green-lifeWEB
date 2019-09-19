@@ -15,6 +15,9 @@ import { GuestService } from '../../services/guest.service';
 export class GuestComponent implements OnInit, AfterViewInit {
 
   selectedPaymentType;
+  checkInGuest = [];
+  bookedGuest = [];
+
   paymentTypes = [
     {
       name: "card",
@@ -41,12 +44,14 @@ export class GuestComponent implements OnInit, AfterViewInit {
     private fb: FormBuilder,
     private roomService: RoomService,
     private guestService: GuestService
-  ) { }
+  ) { 
+    this.getGuests();
+  }
 
   guestForm = this.fb.group({
     name: ['', [Validators.required]],
     phone: [null, [Validators.required]],
-    email: ['', [Validators.email, Validators.required]],
+    email: ['', [Validators.email]],
     paymentType: ['', [Validators.required]],
     roomNo: [null, [Validators.required]],
     checkInTime: ['', [Validators.required]],
@@ -64,11 +69,49 @@ export class GuestComponent implements OnInit, AfterViewInit {
     //Add 'implements AfterViewInit' to the class.
     
   }
+  getGuests(){
+    this.guestService.getGuests().pipe(
+      map(guest => {
+        guest.docs.map(
+          guest => {
+            const g = guest.data();
+            g.id = guest.id;
+            this.roomService.getRoom(g.roomID)
+            .pipe(
+              map(r => {
+                g.roomInfo = r.data();
+                this.sortGuests(g);
+              })
+            ).subscribe();
+          }
+        )
+      })
+    ).subscribe();
+  }
+
+  sortGuests(guest){
+      this.resetData();
+    switch(guest.status){
+      case "booked":
+        this.bookedGuest.push(guest);
+        break;
+      case "checkedin":
+        this.checkInGuest.push(guest);
+        break;
+      default:
+        console.log("This is an error");
+        break;
+    }
+  }
 
   saveGuest(){
-    this.guestForm.addControl('amount', this.fb.control(this.guestForm.get('')))
     this.guestService.saveGuest(this.guestForm.value).then(cb => {
-      console.log(cb);
+      this.roomService.updateRoom(this.guestForm.get('roomID').value, {status: this.guestForm.get('status').value})
+      .then(suc => {
+        this.guestForm.reset();
+        this.modalService.dismissAll();
+        this.getGuests();
+      }).catch(err => console.log(err));
     }).catch(err => console.log("Error"+err))
   }
 
@@ -77,15 +120,18 @@ export class GuestComponent implements OnInit, AfterViewInit {
     this.roomService.filterRooms("status",  "available")
     .get().then(rooms => {
       console.log(rooms.docs)
-      rooms.forEach((room: any) => {
-        console.log(room);
-        const r = room.data;
+      rooms.forEach(room => {
+        const r = room.data();
         r.id = room.id;
         this.emptyRooms.push(r);
       })
     }).catch(err => console.log("Error ", err))
   }
 
-
+  resetData(){
+    this.checkInGuest = [];
+    this.bookedGuest = [];
+    this.emptyRooms = [];
+  }
 
 }
