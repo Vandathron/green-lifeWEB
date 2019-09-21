@@ -5,20 +5,63 @@
     <button type="button" class="pull-right btn btn-primary mr-2" (click)="open(bookModal, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; Book</button>
   </h2>
 
-  <div class="row border-0">
-    <div class="col-3 card border-0 p-0">
+  <div class="row">
+    Checked in
+    <div class="col-3 card border-0 p-0 mr-3" *ngFor="let guest of checkedInRooms" >
+        <div class="card-header text-dark p-0 border-0">
+          <span class="ml-1">Room {{guest.roomNo}}</span>
+        </div>
+        <div class="card-body text-center text-dark">
+          <i class="fa fa-user-circle fa-3x"></i><span class="name">{{guest.name}}</span>
+        </div>
+        <div class="footer p-1 text-dark d-inline-flex">
+          <i class="fa fa-2x fa-calendar"></i><h3 class="ml-2">{{guest.checkInTime + '--' + guest.checkOutTime}}</h3><i class="ml-2 fa-2x fa fa-check-circle"></i>
+        </div>
+      </div>
+  </div>
+  <div class="row">
+    Booked
+        <div class="col-3 card border-0 p-0 mr-3" *ngFor="let guest of bookedRooms" >
+            <div class="card-header text-dark p-0 border-0">
+              <span class="ml-1">Room {{guest.roomNo}}</span>
+            </div>
+            <div class="card-body text-center text-dark">
+              <i class="fa fa-user-circle fa-3x"></i><span class="name">{{guest.name}}</span>
+            </div>
+            <div class="footer p-1 text-dark d-inline-flex">
+              <i class="fa fa-2x fa-calendar"></i><h3 class="ml-2">{{guest.checkInTime + '--' + guest.checkOutTime}}</h3><i class="ml-2 fa-2x fa fa-check-circle"></i>
+            </div>
+          </div>
+  </div>
+
+  <div class="row">
+    Empty rooms
+        <div class="col-3 card border-0 p-0 mr-3" *ngFor="let room of emptyRooms" >
+            <div class="card-header text-dark p-0 border-0">
+              <span class="ml-1">Room {{room.data().roomNo}}</span>
+            </div>
+            <div class="card-body text-center text-dark">
+              <i class="fa fa-user-circle fa-3x"></i><span class="name">Available</span>
+            </div>
+            <div class="footer p-1 text-dark d-inline-flex">
+              <i class="fa fa-2x fa-calendar"></i><h3 class="ml-2"></h3><i class="ml-2 fa-2x fa fa-check-circle"></i>
+            </div>
+          </div>
+  </div>
+<!-- 
+  <div class="row border-0 mb-5">
+    <div class="col-3 card border-0 p-0 mr-3" *ngFor="let room of roomsInfo" >
       <div class="card-header text-dark p-0 border-0">
-        <span class="ml-1">Room 34</span><span class="pull-right mr-1">Taken</span>
+        <span class="ml-1">Room {{room.roomNo}}</span><span class="pull-right mr-1">{{room.status == "available"? 'Free': 'Not Free'}}</span>
       </div>
       <div class="card-body text-center text-dark">
-        <i class="fa fa-user-circle fa-3x"></i><span class="name">Akinnagbe Tosin</span>
+        <i class="fa fa-user-circle fa-3x"></i><span class="name">{{room.guestName? room.guestName: 'Empty room'}}</span>
       </div>
       <div class="footer p-1 text-dark d-inline-flex">
-        <i class="fa fa-2x fa-calendar"></i><h3 class="ml-2">2 days</h3><i class="ml-2 fa-2x fa fa-check-circle"></i>
+        <i class="fa fa-2x fa-calendar"></i><h3 class="ml-2">{{room.checkInTime + '--' + room.checkOutTime}}</h3><i class="ml-2 fa-2x fa fa-check-circle"></i>
       </div>
     </div>
-
-  </div>
+  </div> -->
 <ng-template #newRoomModal let-c = "close" let-d="dismiss">
     <div class="card">
       <div class="card-header">

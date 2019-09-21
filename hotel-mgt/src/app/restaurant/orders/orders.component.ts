@@ -86,8 +86,10 @@ export class OrdersComponent implements OnInit {
   }
 
   addToOrderView(){
-    this.orderedItems = this.selectedItems.value;
-    
+    this.orderedItems = [];
+    this.selectedItems.value.forEach(item => this.orderedItems.push({
+      itemName: item.itemName, itemPrice: item.itemPrice
+    }));
   }
 
   getItems(){
@@ -128,6 +130,9 @@ export class OrdersComponent implements OnInit {
     .catch(err => console.log("Error deleting", err));
   }
 
+  changeItem(item, event){
+    item.itemPrice *= event;
+  }
 
 
 }

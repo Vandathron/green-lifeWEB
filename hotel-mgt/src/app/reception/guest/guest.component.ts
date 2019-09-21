@@ -90,7 +90,6 @@ export class GuestComponent implements OnInit, AfterViewInit {
   }
 
   sortGuests(guest){
-      this.resetData();
     switch(guest.status){
       case "booked":
         this.bookedGuest.push(guest);

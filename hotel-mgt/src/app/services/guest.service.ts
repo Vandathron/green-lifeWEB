@@ -18,4 +18,8 @@ export class GuestService {
   saveGuest(guest: IGuest){
     return this.fireStore.collection('guests').add(guest);
   }
+
+  joinGuestsAndRooms(property: string, value: string){
+    return this.fireStore.firestore.collection("guests").where(property, "==", value).get();
+  }
 }

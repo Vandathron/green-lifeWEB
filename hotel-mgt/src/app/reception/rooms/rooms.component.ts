@@ -3,6 +3,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators } from '@angular/forms';
 import { RoomService } from '../../services/room.service';
 import { map } from 'rxjs/operators';
+import { GuestService } from '../../services/guest.service';
+import { IRoomGuest } from '../../models/room';
 
 @Component({
   selector: 'app-rooms',
@@ -15,8 +17,12 @@ export class RoomsComponent implements OnInit {
   roomTypes = [
     "Single", "Double", "Triple", "Family"
   ];
-  emptyRooms = [];
+  roomsInfo: IRoomGuest[] = [];
   bookedRoomNo;
+
+  emptyRooms = [];
+  bookedRooms = [];
+  checkedInRooms = [];
 
   rooms = [];
   room = this.fb.group({
@@ -38,8 +44,12 @@ export class RoomsComponent implements OnInit {
   constructor(
     private modalService: NgbModal,
     private fb: FormBuilder,
-    private roomService: RoomService
-  ) { }
+    private roomService: RoomService,
+    private guestService: GuestService
+  ) {
+    this.getRooms();
+    
+   }
 
   ngOnInit() {
   }
@@ -64,16 +74,47 @@ export class RoomsComponent implements OnInit {
   }
 
   getRooms(){
+    this.guestService.getGuests().pipe(
+      map(guests => {
+        guests.docs.map(doc => this.sortRooms(doc.data()))
+      })
+    ).subscribe();
+
     this.roomService.getRooms().pipe(
       map(rooms => {
-        rooms.forEach(doc => {
-          const data = doc.data()
-          data.id = doc.id;
-          console.log(data);
-          this.rooms.push(data);
-        })
+        this.emptyRooms = rooms.docs.filter(room => room.data().status == "unavailable");
       })
-    )
+    ).subscribe();
+  }
+
+  sortRooms(guest){
+    switch(guest.status){
+      case "booked":
+        this.bookedRooms.push(guest);
+        break;
+      case "checkedin":
+        this.checkedInRooms.push(guest);
+        break;
+      default:
+        console.log("This should not show");
+    }
+  }
+
+  mapRoom(doc){
+    const roomData = doc.data();
+    this.guestService.joinGuestsAndRooms("roomID", doc.id)
+    .then(guests => {
+      guests.docs.forEach(guest => { 
+        const guestData = guest.data();
+        this.roomsInfo.push({
+          guestName: guestData.name,
+          roomNo: roomData.roomNo,
+          status: guestData.status,
+          checkInTime: guestData.checkin,
+          checkOutTime: guestData.checkout,
+        });
+      })
+    }).catch(err => console.log(err));
   }
 
 }

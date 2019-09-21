@@ -60,8 +60,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let ordered of selectedItems.value">
-            <td>{{ordered.itemName}}</td><td>{{ordered.itemPrice}}</td><td><input type="number" class="form-control" value="1" style="max-width: 50px;"></td><span><i class=" fa fa-trash fa-2x"></i></span>
+          <tr *ngFor="let ordered of orderedItems; let i = index">
+            <td>{{ordered.itemName}}</td><td>{{ordered.itemPrice}}</td><td><input type="number" class="form-control" value="1" (change) = "changeItem(ordered, $event.target.value)" style="max-width: 50px;"></td><span><i class=" fa fa-trash fa-2x"></i></span>
           </tr>
         </tbody>
       </table>

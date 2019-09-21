@@ -4,3 +4,11 @@ export interface IRoom {
     roomType : string;
     id?: string;
 }
+
+export interface IRoomGuest{
+    guestName: string;
+    roomNo: number;
+    status: string;
+    checkInTime: string;
+    checkOutTime: string;
+}
