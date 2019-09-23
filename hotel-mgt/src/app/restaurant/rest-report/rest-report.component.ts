@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ReportService } from '../../services/report.service';
 
 @Component({
   selector: 'app-rest-report',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RestReportComponent implements OnInit {
 
-  constructor() { }
+   reportType: string = "restaurant";
+  constructor(){}
 
-  ngOnInit() {
-  }
 
+  
+ ngOnInit(){
+
+ }
 }

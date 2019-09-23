@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BarReportComponent implements OnInit {
 
+  reportType: string = "bar";
   constructor() { }
 
   ngOnInit() {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { OrderService } from '../../services/order.service';
@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { IItem } from '../../models/Order';
 import { IGuest } from '../../models/guest';
 import { GuestService } from '../../services/guest.service';
+import { ReportService } from '../../services/report.service';
 
 @Component({
   selector: 'app-orders',
@@ -20,7 +21,8 @@ export class OrdersComponent implements OnInit {
   loaded: boolean = false;
   orderIsByGuest: boolean;
   placeOrders = [];
-
+  totalValue: number = 0;
+  @Input("orderType") orderType: string;
 
 
   
@@ -46,18 +48,21 @@ export class OrdersComponent implements OnInit {
     private modalService: NgbModal,
     private fb: FormBuilder,
     private orderService: OrderService, 
+    private reportService: ReportService,
     private guestService: GuestService
   ) {
-    this.getItems();
    }
 
   ngOnInit() {
     this.loadGuests();
+    this.getItems();
   }
 
   saveItem(){
+    this.orderForm.addControl("itemType", this.fb.control(this.orderType));
     this.orderService.addItem(this.orderForm.value).then(data => {
       this.dismissModal();
+      this.orderForm.removeControl("itemType");
       this.getItems();
     }).catch(err => console.log(err))
   }
@@ -86,25 +91,28 @@ export class OrdersComponent implements OnInit {
   }
 
   addToOrderView(){
+    this.totalValue = 0;
     this.orderedItems = [];
-    this.selectedItems.value.forEach(item => this.orderedItems.push({
-      itemName: item.itemName, itemPrice: item.itemPrice
-    }));
+    this.selectedItems.value.forEach(item => {
+      item.itemQuantity = 1;
+      this.orderedItems.push({
+        itemName: item.itemName, itemPrice: item.itemPrice, itemQuantity: 1
+      })
+    this.calculateOrderTotal(item);
+    }
+    );
   }
 
   getItems(){
     this.savedItems = [];
-    this.orderService.getItems().pipe(
-      map(changes => {
-        changes.map( data => {
-          const item = data.payload.doc.data() as IItem;
-          item.id = data.payload.doc.id;
-          console.log(item);
-          this.savedItems.push(item);
-        })
-        // this.loaded = true;
+    this.orderService.getItems(this.orderType)
+    .then(items => {
+      items.forEach(doc => {
+        const d = doc.data() as IItem;
+        d.id = doc.id;
+        this.savedItems.push(d);
       })
-    ).subscribe();
+    })
   }
 
   loadGuests(){
@@ -121,17 +129,41 @@ export class OrdersComponent implements OnInit {
 
 
   printOrder(){
-
+    if(this.orderIsByGuest){
+      if(this.isBillPlaced){
+        this.reportService.saveToReport({
+          guestName: this.selectedGuest.value.name,
+          items: this.orderedItems,
+          totalPrice: this.totalValue,
+          reportType: this.orderType,
+          date: new Date()
+        }).then(cb => {
+          //When above is successful, update guest balance
+          this.guestService.updateGuest(this.selectedGuest.value.id, {
+            totalBill: this.totalValue
+          })
+          .then(onUpdated => console.log("Updated successfully")).catch(onErro => console.log(onErro));
+        })
+      }
+    }
   }
 
   deleteSavedItem(item){
     this.orderService.deleteItem(item.id)
-    .then(cb => console.log("Successfully deleted " +cb))
+    .then(cb => this.getItems())
     .catch(err => console.log("Error deleting", err));
   }
 
-  changeItem(item, event){
-    item.itemPrice *= event;
+  calculateOrderTotal(item){
+      this.totalValue += item.itemPrice;
+  }
+
+  increaseTotal(item){
+    this.totalValue += item.itemPrice;
+    item.itemQuantity +=1;
+  }
+  decreaseTotal(item){
+    item.itemQuantity > 1? (this.totalValue -= item.itemPrice, item.itemQuantity -=1): console.log("cannot");
   }
 
 

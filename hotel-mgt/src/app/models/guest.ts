@@ -8,6 +8,7 @@ export interface IGuest {
     checkInTime: string;
     checkOutTime: string;
     roomID: string;
+    amountLeft: number
 }
 
 export interface IGuestOrder{

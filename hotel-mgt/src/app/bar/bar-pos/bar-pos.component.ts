@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BarPosComponent implements OnInit {
 
+  orderType: string = "bar"
   constructor() { }
 
   ngOnInit() {

@@ -1,24 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import{CustomDaterangePickerComponent} from './custom-daterange-picker/custom-daterange-picker.component';
+import { OrdersComponent } from './orders/orders.component';
+import { ReportComponent } from './report/report.component';
+import { AngularmaterialModule } from '../material/angularmaterial/angularmaterial.module';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { BrowserModule, Title } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 
 @NgModule({
-  declarations: [CustomDaterangePickerComponent],
+  declarations: [OrdersComponent, ReportComponent],
   imports: [
     CommonModule,
-    NgbModule.forRoot(),
-    BrowserModule,
+    AngularmaterialModule,
+    ReactiveFormsModule,
     FormsModule,
-    BrowserAnimationsModule,
-    ReactiveFormsModule
+    NgbModule
+  
   ],exports:[
-    CustomDaterangePickerComponent
+    OrdersComponent,
+    ReportComponent,
   ]
 })
 export class SharedModule { }

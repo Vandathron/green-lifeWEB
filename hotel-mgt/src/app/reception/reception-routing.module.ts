@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { RoomsComponent } from './rooms/rooms.component';
 import { BookingComponent } from './booking/booking.component';
 import { GuestComponent } from './guest/guest.component';
+import { RecepReportComponent } from './recep-report/recep-report.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,9 @@ const routes: Routes = [
   },
   {
     path: "guests", component: GuestComponent
+  },
+  {
+    path: "report", component: RecepReportComponent
   },
   {
     path: '', redirectTo: 'guests'

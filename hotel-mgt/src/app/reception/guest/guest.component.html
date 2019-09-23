@@ -48,7 +48,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let guest of bookedGuest">
-        <td>{{guest.name}}</td><td>{{guest.roomInfo.roomNo}}</td><td>{{guest.roomInfo.roomType}}</td><td>{{guest.phone}}</td><td>{{guest.email}}</td><td>{{guest.roomInfo.roomPrice}}</td><td>{{guest.paymentType}}</td><td>{{guest.checkInTime}}</td><td>{{guest.checkOutTime}}</td><td><button type="button" class="btn btn-danger">Cancel booking</button></td>
+        <td>{{guest.name}}</td><td>{{guest.roomInfo.roomNo}}</td><td>{{guest.roomInfo.roomType}}</td><td>{{guest.phone}}</td><td>{{guest.email}}</td><td>{{guest.roomInfo.roomPrice}}</td><td>{{guest.paymentType}}</td><td>{{guest.checkInTime}}</td><td>{{guest.checkOutTime}}</td><td><button type="button" class="btn btn-danger" (click)="cancelBooking(guest)">Cancel booking</button> <button class="btn btn-primary" (click)="checkInGuestMethod(guest)">Check in</button></td>
       </tr>
     </tbody>
   </table>
@@ -85,14 +85,15 @@
                         </mat-option>
                       </mat-select>
                   </mat-form-field>
+                  <mat-checkbox formControlName="roomPaid">Paid</mat-checkbox>
               </div>
         </div>
         <div class="row">
             <div class=" col-6">
               <mat-form-field>
                   <mat-label>Available rooms</mat-label>
-                  <mat-select formControlName = "roomID" >
-                    <mat-option *ngFor="let room of emptyRooms" [value]="room.id" >
+                  <mat-select formControlName = "room" >
+                    <mat-option *ngFor="let room of emptyRooms" [value]="room" >
                       {{room.roomNo}} | {{room.roomType}} | {{room.roomPrice}}
                     </mat-option>
                   </mat-select>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IGuest } from '../../models/guest';
+import { ReportService } from '../../services/report.service';
 
 @Component({
   selector: 'app-recep-report',
@@ -8,13 +9,19 @@ import { IGuest } from '../../models/guest';
 })
 export class RecepReportComponent implements OnInit {
 
-  constructor() { }
+
+  constructor(
+    private reportService: ReportService
+  ) { }
 
   guests: IGuest[] = [];
 
   ngOnInit() {
   }
 
-
+  getMyReport(){
+    this.reportService.getAllReports()
+    
+  }
 
 }

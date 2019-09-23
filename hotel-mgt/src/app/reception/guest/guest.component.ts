@@ -17,6 +17,7 @@ export class GuestComponent implements OnInit, AfterViewInit {
   selectedPaymentType;
   checkInGuest = [];
   bookedGuest = [];
+  guestPaid: boolean = true;
 
   paymentTypes = [
     {
@@ -56,8 +57,9 @@ export class GuestComponent implements OnInit, AfterViewInit {
     roomNo: [null, [Validators.required]],
     checkInTime: ['', [Validators.required]],
     checkOutTime: ['', [Validators.required]],
-    roomID: [null, [Validators.required]],
-    status: [null, [Validators.required]]
+    room: [null, [Validators.required]],
+    status: [null, [Validators.required]],
+    roomPaid: [true, [Validators.required]]
   });
 
 
@@ -104,9 +106,18 @@ export class GuestComponent implements OnInit, AfterViewInit {
   }
 
   saveGuest(){
+    this.guestForm.addControl("totalBill", this.fb.control(this.guestForm.get("room").value.roomPrice));
+    this.guestForm.addControl("paidBill", this.fb.control(this.guestForm.get("roomPaid").value? this.guestForm.get("room").value.roomPrice: 0));
+    this.guestForm.addControl("roomID",this.fb.control(this.guestForm.get("room").value.id));
+    this.guestForm.addControl("roomNo",this.fb.control(this.guestForm.get("room").value.roomNo));
+    this.guestForm.removeControl("room");
     this.guestService.saveGuest(this.guestForm.value).then(cb => {
-      this.roomService.updateRoom(this.guestForm.get('roomID').value, {status: this.guestForm.get('status').value})
+      this.guestForm.removeControl("totalBill");
+      this.guestForm.removeControl("paidBill");
+      this.guestForm.removeControl("roomNo");
+      this.roomService.updateRoom(this.guestForm.get("roomID").value, {status: this.guestForm.get('status').value})
       .then(suc => {
+        this.guestForm.removeControl("roomID");
         this.guestForm.reset();
         this.modalService.dismissAll();
         this.getGuests();
@@ -115,6 +126,7 @@ export class GuestComponent implements OnInit, AfterViewInit {
   }
 
   openModal(content, options){
+    this.guestForm.addControl("room", this.fb.control(null));
     this.modalService.open(content, options);
     this.roomService.filterRooms("status",  "available")
     .get().then(rooms => {
@@ -131,6 +143,19 @@ export class GuestComponent implements OnInit, AfterViewInit {
     this.checkInGuest = [];
     this.bookedGuest = [];
     this.emptyRooms = [];
+  }
+
+  cancelBooking(guest){
+    this.guestService.deleteGuest(guest)
+    .then(onSuc => {
+      console.log("Deleted successfully");
+      this.roomService.updateRoom(guest.roomID, {status: "available"})
+      .then(onSuc => this.getGuests()).catch(err => console.log(err));
+    })
+  }
+
+  checkInGuestMethod(guest){
+    
   }
 
 }

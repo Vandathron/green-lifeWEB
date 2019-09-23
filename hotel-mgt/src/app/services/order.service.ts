@@ -13,14 +13,17 @@ export class OrderService {
   }
 
   addItem(item){
-    return this.fireStore.collection('restaurant-items').add(item);
+    return this.fireStore.collection('items').add(item);
   }
 
-  getItems(){
-    return this.fireStore.collection('restaurant-items').snapshotChanges();
+  getItems(value: string){
+    return this.fireStore.firestore.collection("items").where("itemType", "==", value).get();
   }
 
-  deleteItem(item){
-    return this.fireStore.collection("restaurant-items").doc(item.id).delete();
+  deleteItem(itemID){
+    return this.fireStore.collection("items").doc(itemID).delete();
   }
+  
+  //Bar items
+
 }

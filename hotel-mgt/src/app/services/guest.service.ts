@@ -22,4 +22,11 @@ export class GuestService {
   joinGuestsAndRooms(property: string, value: string){
     return this.fireStore.firestore.collection("guests").where(property, "==", value).get();
   }
+  updateGuest(id, guestData){
+    return this.fireStore.collection("guests").doc(id).update(guestData);
+  }
+
+  deleteGuest(guest){
+    return this.fireStore.collection("guests").doc(guest.id).delete();
+  }
 }

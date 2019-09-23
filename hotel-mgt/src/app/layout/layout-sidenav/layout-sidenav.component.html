@@ -9,17 +9,17 @@
 
     <sidenav-menu icon="fa fa-gift" text="Restaurant">
         <sidenav-router-link route="/v/restaurant/rest-pos" [active]="isActive('staff')">POS/Orders</sidenav-router-link>
-        <sidenav-router-link route="/v/restaurant/rest-report" [active]="isActive('rest-report')">My report</sidenav-router-link>
+        <sidenav-router-link route="/v/restaurant/report" [active]="isActive('rest-report')">My report</sidenav-router-link>
     </sidenav-menu>
     <sidenav-menu icon="fa fa-truck" text="Reception">
         <sidenav-router-link route="/v/reception/guests">Guests</sidenav-router-link> 
-      <sidenav-router-link route="/v/reception/bookings" [active]="isActive('bookings')">Bookings</sidenav-router-link>
+      <!-- <sidenav-router-link route="/v/reception/bookings" [active]="isActive('bookings')">Bookings</sidenav-router-link> -->
       <sidenav-router-link route="/v/reception/rooms" [active]="isActive('rooms')">Rooms</sidenav-router-link>
-      <sidenav-router-link route="/v/reception/recep-report" [active]="isActive('recep-report')">My report</sidenav-router-link>
+      <sidenav-router-link route="/v/reception/report" [active]="isActive('recep-report')">My report</sidenav-router-link>
     </sidenav-menu>
     <sidenav-menu icon="fa fa-bar-chart" text="Bar">
-      <sidenav-router-link route="/v/bar/pos" [active]="isActive('bar-pos')">POS/Orders</sidenav-router-link>
-      <sidenav-router-link route="/v/bar/bar-report" [active]="isActive('bar-report')">My report</sidenav-router-link>
+      <sidenav-router-link route="/v/bar/bar-pos" [active]="isActive('bar-pos')">POS/Orders</sidenav-router-link>
+      <sidenav-router-link route="/v/bar/report" [active]="isActive('bar-report')">My report</sidenav-router-link>
     </sidenav-menu>
   </div>
 

@@ -33,7 +33,7 @@
               </mat-select>
           </mat-form-field>
           <div>
-              <mat-checkbox [value]="isBillPlaced">
+            <mat-checkbox [value]="isBillPlaced" [checked]="true">
               Place on bill
           </mat-checkbox>
           </div>
@@ -61,12 +61,12 @@
         </thead>
         <tbody>
           <tr *ngFor="let ordered of orderedItems; let i = index">
-            <td>{{ordered.itemName}}</td><td>{{ordered.itemPrice}}</td><td><input type="number" class="form-control" value="1" (change) = "changeItem(ordered, $event.target.value)" style="max-width: 50px;"></td><span><i class=" fa fa-trash fa-2x"></i></span>
+            <td>{{ordered.itemName}}</td><td>{{ordered.itemPrice}}</td><td>{{ordered.itemQuantity}}</td><td><i class="fa fa-plus" (click)="increaseTotal(ordered)"></i><i class="fa fa-minus d-block" (click)="decreaseTotal(ordered)"></i></td>
           </tr>
         </tbody>
       </table>
       <div class="text-center">
-        Total: 
+        Total: {{totalValue}}
       </div>
       <div class="row">
           <button class="btn col-12 align-self-center btn-dark" (click) = "printOrder()">Check out/Pay</button>

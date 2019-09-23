@@ -41,6 +41,7 @@ import { AuthService } from "./services/auth.service";
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import {  AngularFirestoreModule } from "@angular/fire/firestore";
 import { StaffService } from "./services/staff.service";
+import { SharedModule } from "./shared/shared.module";
 
 
 
@@ -78,7 +79,8 @@ import { StaffService } from "./services/staff.service";
     // App
     AppRoutingModule,
     LayoutModule,
-    AngularmaterialModule
+    AngularmaterialModule,
+    SharedModule
     ,
 
     ServiceWorkerModule.register("ngsw-worker.js", {
