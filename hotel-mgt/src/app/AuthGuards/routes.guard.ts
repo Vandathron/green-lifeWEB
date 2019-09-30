@@ -5,12 +5,19 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class RoutesGuard implements  CanLoad {
+export class RoutesGuard implements  CanLoad, CanActivate {
   // canActivate(
   //   next: ActivatedRouteSnapshot,
   //   state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
   //   return true;
   // }
+
+  canActivate(){
+    if(JSON.parse(localStorage.getItem("LoggedInUser")).department == "admin"){
+      return true;
+    }else return false;
+  }
+  
   // canActivateChild(
   //   next: ActivatedRouteSnapshot,
   //   state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {

@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StaffService } from '../../services/staff.service';
 import { IUser } from '../../models/user';
 import { map } from 'rxjs/operators';
+import { AuthService } from '../../services/auth.service';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-staff',
@@ -12,11 +14,14 @@ import { map } from 'rxjs/operators';
 })
 export class StaffComponent implements OnInit {
 
-  selectedDepartment;
+  selectedDepartment = "bar";
    departments = ["admin", "reception", "restaurant", "bar"
   ];
+  loaded: boolean = false;
+
 
   staffs: IUser[] = [];
+  selectedStaff;
 
   staffForm = this.fb.group({
     firstName: ['', [Validators.required]],
@@ -30,7 +35,9 @@ export class StaffComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private modalService: NgbModal,
-    private staffService: StaffService
+    private staffService: StaffService,
+    private authService: AuthService,
+    // private auth: AngularFireAuth
   ) { 
     this.getStaffs();
   }
@@ -39,8 +46,9 @@ export class StaffComponent implements OnInit {
   }
 
 
-  openNewStaff(content, options){
-    this.modalService.open(content, options)
+  openModal(content, options, data?){
+    this.selectedStaff = data;
+    this.modalService.open(content, {size: 'lg', backdrop: true, centered: true})
   }
 
   addStaff(){
@@ -63,7 +71,24 @@ export class StaffComponent implements OnInit {
           this.staffs.push(data);
         })
       })
-    ).subscribe();
+    ).subscribe(data => this.loaded = true);
+  }
+
+
+  deleteStaff(){
+    this.authService.deleteUser(this.selectedStaff.email, this.selectedStaff.password).then(
+      staff => {
+        staff.user.delete().then(res => {
+          this.staffService.deleteStaff(this.selectedStaff.id).then(res => {
+            this.getStaffs();
+            this.closeModal();
+          })
+        })
+      }
+    )
+  }
+  closeModal(){
+    this.modalService.dismissAll();
   }
 
 }

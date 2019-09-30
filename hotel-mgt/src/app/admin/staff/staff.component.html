@@ -1,6 +1,6 @@
 <h4 class="font-weight-bold">
   Staffs
-  <button type="button" class="pull-right btn btn-primary" (click)="openNewStaff(newStaff, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; Add Staff</button>
+  <button type="button" class="pull-right btn btn-primary" (click)="openModal(newStaff, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; Add Staff</button>
 </h4>
 
 <div class="container-fluid mt-5">
@@ -8,7 +8,7 @@
         <div class="col col-3">
           <div class="images-container text-center">
             <h5>{{staff.username}}</h5>
-            <i class="fa fa-user fa-10x"></i>
+            <i class="fa fa-user " style="font-size: 10em;" *ngIf="loaded"></i>
           </div>
         </div>
         <div class="col col-3">
@@ -43,7 +43,7 @@
             <button class=" btn btn-primary col-5">
               Edit
             </button>
-            <button class=" btn btn-danger col-5 offset-1">
+            <button class=" btn btn-danger col-5 offset-1" (click)="openModal(deleteStaf, {windowClass: 'modal-lg animate'}, staff)">
               Delete
             </button>
           </div>
@@ -53,6 +53,24 @@
 
 
 <!-- Modals below -->
+
+<!-- Confirm delete staff -->
+
+<ng-template #deleteStaf let-c = "close" let-d = "dismiss">
+  <div class="row">
+    <div class="col-12 text-center p-5 text-big text-capitalize">
+      Are you sure?
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <button type="button" (click)="deleteStaff()" class="btn btn-danger">Delete</button>
+    </div>
+    <div class="col-6">
+      <button type="button" (click)="closeModal()" class="btn btn-danger">Cancel</button>
+    </div>
+  </div>
+</ng-template>
 
 <!-- Add staff modals -->
 <ng-template #newStaff let-c="close" let-d="dismiss">
@@ -89,7 +107,7 @@
             </div>
         </div>
         <div class="card-footer">
-          <button class="btn green pull-right" type="submit">
+          <button class="btn green pull-right" type="submit" [disabled]="staffForm.invalid">
             Add staff
           </button>
         </div>

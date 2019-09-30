@@ -21,12 +21,14 @@ export class StaffService {
      return this.fireAuth.auth.createUserWithEmailAndPassword(staff.email, staff.password)
     .then(cred => {
       return this.fireDB.collection('staffs').doc<IUser>(cred.user.uid).set({
+        id: cred.user.uid,
         firstName: staff.firstName,
         lastName: staff.lastName,
         department: staff.department,
         phone: staff.phone,
         email: staff.email,
-        username: staff.username
+        username: staff.username,
+        password: staff.password
       })
     })
   }
@@ -34,4 +36,9 @@ export class StaffService {
   getStaffs(){
      return this.fireDB.collection("staffs").snapshotChanges();
   }
+
+  deleteStaff(id){
+    return this.fireDB.collection("staffs").doc(id).delete();
+  }
+  
 }

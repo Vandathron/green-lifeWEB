@@ -5,6 +5,7 @@ import { ReportComponent } from './report/report.component';
 import { AngularmaterialModule } from '../material/angularmaterial/angularmaterial.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 
@@ -15,6 +16,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AngularmaterialModule,
     ReactiveFormsModule,
     FormsModule,
+    NgSelectModule,
     NgbModule
   
   ],exports:[

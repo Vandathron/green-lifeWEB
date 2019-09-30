@@ -6,6 +6,8 @@ import { MatTableDataSource } from '@angular/material';
 import { RoomService } from '../../services/room.service';
 import { map } from 'rxjs/operators';
 import { GuestService } from '../../services/guest.service';
+import { formatDate } from '@angular/common';
+import { ReportService } from '../../services/report.service';
 
 @Component({
   selector: 'app-guest',
@@ -44,7 +46,8 @@ export class GuestComponent implements OnInit, AfterViewInit {
     private modalService: NgbModal,
     private fb: FormBuilder,
     private roomService: RoomService,
-    private guestService: GuestService
+    private guestService: GuestService,
+    private reportService: ReportService
   ) { 
     this.getGuests();
   }
@@ -55,8 +58,8 @@ export class GuestComponent implements OnInit, AfterViewInit {
     email: ['', [Validators.email]],
     paymentType: ['', [Validators.required]],
     roomNo: [null, [Validators.required]],
-    checkInTime: ['', [Validators.required]],
-    checkOutTime: ['', [Validators.required]],
+    checkInTime: [new Date(), [Validators.required]],
+    checkOutTime: [new Date(), [Validators.required]],
     room: [null, [Validators.required]],
     status: [null, [Validators.required]],
     roomPaid: [true, [Validators.required]]
@@ -72,6 +75,8 @@ export class GuestComponent implements OnInit, AfterViewInit {
     
   }
   getGuests(){
+    this.bookedGuest = [];
+    this.checkInGuest = [];
     this.guestService.getGuests().pipe(
       map(guest => {
         guest.docs.map(
@@ -112,11 +117,17 @@ export class GuestComponent implements OnInit, AfterViewInit {
     this.guestForm.addControl("roomNo",this.fb.control(this.guestForm.get("room").value.roomNo));
     this.guestForm.removeControl("room");
     this.guestService.saveGuest(this.guestForm.value).then(cb => {
+      // this.reportService.saveToReport({
+      //   guestName: this.guestForm.value.name,
+        
+      // })
       this.guestForm.removeControl("totalBill");
       this.guestForm.removeControl("paidBill");
       this.guestForm.removeControl("roomNo");
       this.roomService.updateRoom(this.guestForm.get("roomID").value, {status: this.guestForm.get('status').value})
       .then(suc => {
+        this.checkInGuest = [];
+        this.bookedGuest = [];
         this.guestForm.removeControl("roomID");
         this.guestForm.reset();
         this.modalService.dismissAll();
@@ -130,7 +141,6 @@ export class GuestComponent implements OnInit, AfterViewInit {
     this.modalService.open(content, options);
     this.roomService.filterRooms("status",  "available")
     .get().then(rooms => {
-      console.log(rooms.docs)
       rooms.forEach(room => {
         const r = room.data();
         r.id = room.id;
@@ -156,6 +166,17 @@ export class GuestComponent implements OnInit, AfterViewInit {
 
   checkInGuestMethod(guest){
     
+  }
+
+  checkOutGuest(guest){
+    
+  }
+  formatD(date){
+    return formatDate(date, 'dd MMM yyyy hh:mm a', 'en');
+  }
+
+  saveReport(){
+
   }
 
 }

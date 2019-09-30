@@ -5,6 +5,8 @@ import { RoomService } from '../../services/room.service';
 import { map } from 'rxjs/operators';
 import { GuestService } from '../../services/guest.service';
 import { IRoomGuest } from '../../models/room';
+import { formatDate } from '@angular/common';
+import { IGuest } from '../../models/guest';
 
 @Component({
   selector: 'app-rooms',
@@ -19,6 +21,8 @@ export class RoomsComponent implements OnInit {
   ];
   roomsInfo: IRoomGuest[] = [];
   bookedRoomNo;
+
+  currentTime: number = new Date().getTime()*1000;
 
   emptyRooms = [];
   bookedRooms = [];
@@ -115,6 +119,14 @@ export class RoomsComponent implements OnInit {
         });
       })
     }).catch(err => console.log(err));
+  }
+
+  formatD(date: string){
+    return formatDate(date, 'mm-dd hh:mm a', 'en')
+  }
+
+  isCheckoutDue(guest: IGuest){
+    return this.currentTime > ( new Date(guest.checkOutTime).getTime() * 1000);
   }
 
 }

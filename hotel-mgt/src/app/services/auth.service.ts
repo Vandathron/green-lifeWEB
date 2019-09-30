@@ -12,8 +12,15 @@ export class AuthService {
 
   }
 
-  onlogout(){
+  deleteUser(email, password){
+    return this.fireAuth.auth.signInWithEmailAndPassword(email, password);
+  }
 
+  onlogout(){
+    this.fireAuth.auth.signOut().then(logOutSuccessful => {
+      localStorage.removeItem("LoggedInUser")
+      console.log("Logged out successfuly");
+    })
   }
 
   login(username: string, password: string){

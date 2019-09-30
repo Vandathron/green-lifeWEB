@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RoomService } from '../../services/room.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,7 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  cardData: {
+    availableRooms: 0,
+    checkIns: 0,
+    bookings: 0,
+    restaurantSales: 0,
+    barSales: 0,
+    recepSales: 0
+  }
+
+  constructor(
+    private roomService: RoomService,
+  ) { }
 
   ngOnInit() {
   }

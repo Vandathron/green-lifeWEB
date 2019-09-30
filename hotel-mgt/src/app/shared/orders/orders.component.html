@@ -1,7 +1,7 @@
 <h4 class="font-weight-bold">
   Order
   <button type="button" class="pull-right btn btn-primary mr-2" (click)="open(addItemModal, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; Add Item</button>
-  <button type="button" class="pull-right btn btn-primary" (click)="open(placeOrderModal, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; Place order</button>
+  <!-- <button type="button" class="pull-right btn btn-primary" (click)="open(placeOrderModal, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; Place order</button> -->
 </h4>
 
 
@@ -15,32 +15,32 @@
               {{item.itemName}}/{{item.itemPrice}}
             </mat-option>
           </mat-select>
-      </mat-form-field>
-      <div>
+       </mat-form-field>
+      <!-- <div>
           <mat-radio-group [(ngModel)]="orderIsByGuest" style="width: 100%;">
               <mat-radio-button [value]='true'>In house guest</mat-radio-button>
-              <mat-radio-button [value]='false' checked>Others</mat-radio-button>
+              <mat-radio-button [value]='false' [checked] = "true">Others</mat-radio-button>
           </mat-radio-group>
-      </div>
+      </div>  -->
 
-      <div *ngIf="orderIsByGuest">
+      <div>
           <mat-form-field>
               <mat-label>Choose guest</mat-label>
               <mat-select [formControl]="selectedGuest">
                 <mat-option *ngFor="let guest of guests" [value]="guest">
-                  {{guest.name}}/ Room {{guest.roomNo}}
+                  {{guest.name}} in Room {{guest.roomNo}}
                 </mat-option>
               </mat-select>
           </mat-form-field>
           <div>
-            <mat-checkbox [value]="isBillPlaced" [checked]="true">
+            <mat-checkbox [(ngModel)]="isBillPlaced" [ngModelOptions] = "{standalone: 'true'}" [checked]="true">
               Place on bill
           </mat-checkbox>
           </div>
       </div>
-      <div class="form-group" *ngIf="!orderIsByGuest">
+      <!-- <div class="form-group" *ngIf="!orderIsByGuest">
         <input type="text" class="form-control" placeholder="Name on docket" [(ngModel)]="guestName">
-      </div>
+      </div> -->
 
       <div class="row">
         <button class="col-12 btn btn-dark" (click)="addToOrderView()">
@@ -51,7 +51,7 @@
 
     <div class="col-lg-4 border border-1 table-responsive">
       <div class="container p-3 text-center">
-      Order by {{orderIsByGuest? selectedGuest.value.name +" in room "+selectedGuest.value.roomNo  : guestName}}
+      Order by {{orderIsByGuest && selectedGuest.value? selectedGuest.value.name +" in room "+selectedGuest.value.roomNo : ""}}
     </div>
       <table class="table-borderless table">
         <thead>

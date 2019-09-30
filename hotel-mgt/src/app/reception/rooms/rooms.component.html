@@ -9,13 +9,13 @@
     Checked in
     <div class="col-3 card border-0 p-0 mr-3" *ngFor="let guest of checkedInRooms" >
         <div class="card-header text-dark p-0 border-0">
-          <span class="ml-1">Room {{guest.roomNo}}</span>
+          <span class="ml-1">Room {{guest.roomNo}}</span><span class="mr-1 pull-right text-danger">{{isCheckoutDue(guest) ? "Check out due": ""}}</span>
         </div>
         <div class="card-body text-center text-dark">
           <i class="fa fa-user-circle fa-3x"></i><span class="name">{{guest.name}}</span>
         </div>
         <div class="footer p-1 text-dark d-inline-flex">
-          <i class="fa fa-2x fa-calendar"></i><h3 class="ml-2">{{guest.checkInTime + '--' + guest.checkOutTime}}</h3><i class="ml-2 fa-2x fa fa-check-circle"></i>
+          <i class="fa fa-2x fa-calendar"></i><h3 class="ml-2">{{formatD(guest.checkInTime) + '--' + formatD(guest.checkOutTime)}}</h3><i class="ml-2 fa-2x fa fa-check-circle"></i>
         </div>
       </div>
   </div>

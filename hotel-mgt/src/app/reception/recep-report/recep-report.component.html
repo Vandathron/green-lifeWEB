@@ -6,12 +6,17 @@
   <table class="table table-dark table-hover">
     <thead>
       <tr>
-        <th>Guest</th><th>Check in</th><th>Check out</th><th>Amount</th><th>Outstanding</th><th>Actions</th>
+        <th>Guest</th><th>Bar bill</th><th>Restaurant bill</th><th>Total bill paid</th><th>Total bill</th><th>Outstanding bill</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let guest of guests">
-        <!-- <td>{{}}</td> -->
+        <td>{{guest.name}}</td>
+        <td>{{guest.barBill}}</td>
+        <td>{{guest.restaurantBill}}</td>
+        <td>{{guest.paidBill}}</td>
+        <td>{{guest.totalBill}}</td>
+        <td>{{guest.totalBill-guest.paidBill}}</td>
       </tr>
     </tbody>
   </table>

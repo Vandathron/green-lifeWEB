@@ -2,6 +2,9 @@
   My daily report
 </h4>
 
+<ng-select [items]="reports" (ngModelChange)="filterReport($event)" bindLabel="guestName">
+
+</ng-select>
 <div class="container-fluid mt-5">
   <div class="table-responsive">
     <table class="table table-hover table-dark">

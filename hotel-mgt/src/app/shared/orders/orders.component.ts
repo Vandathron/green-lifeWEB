@@ -7,6 +7,9 @@ import { IItem } from '../../models/Order';
 import { IGuest } from '../../models/guest';
 import { GuestService } from '../../services/guest.service';
 import { ReportService } from '../../services/report.service';
+// import { AngularFirestore,   AngularFirestoreCollection } from '@angular/fire/firestore';
+import { firestore } from 'firebase';
+import { isUndefined } from 'util';
 
 @Component({
   selector: 'app-orders',
@@ -49,7 +52,7 @@ export class OrdersComponent implements OnInit {
     private fb: FormBuilder,
     private orderService: OrderService, 
     private reportService: ReportService,
-    private guestService: GuestService
+    private guestService: GuestService,
   ) {
    }
 
@@ -127,24 +130,36 @@ export class OrdersComponent implements OnInit {
     ).subscribe();
   }
 
+  reset(){
+    this.selectedGuest.setValue(null);
+    this.selectedItems.setValue(null);
+    this.orderedItems = [];
+    this.placeOrders = [];
+  }
 
   printOrder(){
     if(this.orderIsByGuest){
-      if(this.isBillPlaced){
-        this.reportService.saveToReport({
+        var report = {
           guestName: this.selectedGuest.value.name,
           items: this.orderedItems,
           totalPrice: this.totalValue,
           reportType: this.orderType,
           date: new Date()
-        }).then(cb => {
+        }
+        this.reportService.setReport(report, this.selectedGuest.value.id).subscribe(cb => {
+          console.log("successful!")
           //When above is successful, update guest balance
           this.guestService.updateGuest(this.selectedGuest.value.id, {
-            totalBill: this.totalValue
+            paidBill: firestore.FieldValue.increment(this.isBillPlaced? this.totalValue: 0),
+            totalBill: firestore.FieldValue.increment(this.totalValue),
+            restaurantBill:  firestore.FieldValue.increment(this.orderType == "restaurant"?this.totalValue: 0),
+            barBill: firestore.FieldValue.increment(this.orderType == "bar"? this.totalValue: 0)
           })
-          .then(onUpdated => console.log("Updated successfully")).catch(onErro => console.log(onErro));
+          
+          .then(onUpdated => this.reset()).catch(onErro => console.log(onErro));
         })
-      }
+    }else {
+
     }
   }
 

@@ -9,7 +9,7 @@ import { ReportService } from '../../services/report.service';
 export class ReportComponent implements OnInit {
 
   @Input("reportType") reportType: string;
-  private reports = [];
+   reports = [];
   constructor(
     private reportService: ReportService
   ) { 
@@ -20,13 +20,18 @@ export class ReportComponent implements OnInit {
   }
 
   getMyReport(){
-    this.reportService.queryReport("reportType", this.reportType)
+    this.reportService.getReports()
     .then(reports => {
-      reports.forEach(doc => {
-        const d = doc.data();
-        d.id = doc.id;
-        this.reports.push(d);
-      });
+      reports.docs.forEach(doc => {
+        doc.data().reports.forEach(report => {
+          if(report.reportType == "bar" && this.reportType=="bar"){
+            this.reports.push(report);
+          }else if(report.reportType=="restaurant" && this.reportType=="restaurant"){
+            this.reports.push(report);
+          } 
+        })
+      })
+      console.log(this.reports);
     }).catch(err => console.log(err));
   }
 
@@ -36,6 +41,18 @@ export class ReportComponent implements OnInit {
       total += item.itemPrice
     });
     return total;
+  }
+
+  filterReport(guest){
+    this.reportService.filterGuest("guestName", guest.guestName )
+    .then(reports => {
+      this.reports = [];
+      reports.forEach(doc => {
+        const d = doc.data();
+        d.id = doc.id;
+        this.reports.push(d)
+      })
+    }).catch(err => console.log("error ", err));
   }
 
 

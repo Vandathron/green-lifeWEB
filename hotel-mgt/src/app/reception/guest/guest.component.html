@@ -22,8 +22,8 @@
     </thead>
     <tbody>
       <tr *ngFor="let guest of checkInGuest">
-        <td>{{guest.name}}</td><td>{{guest.roomInfo.roomNo}}</td><td>{{guest.roomInfo.roomType}}</td><td>{{guest.phone}}</td><td>{{guest.email}}</td><td>{{guest.roomInfo.roomPrice}}</td><td>{{guest.paymentType}}</td><td>{{guest.checkInTime}}</td><td>{{guest.checkOutTime}}</td>
-        <td><button type="button" class="btn-danger btn">Checkout</button></td>
+        <td>{{guest.name}}</td><td>{{guest.roomInfo.roomNo}}</td><td>{{guest.roomInfo.roomType}}</td><td>{{guest.phone}}</td><td>{{guest.email}}</td><td>{{guest.roomInfo.roomPrice}}</td><td>{{guest.paymentType}}</td><td>{{formatD(guest.checkInTime)}}</td><td>{{formatD(guest.checkOutTime)}}</td>
+        <td><button type="button" class="btn-danger btn" (click)="checkOutGuest(guest)">Checkout</button></td>
       </tr>
     </tbody>
   </table>
@@ -100,12 +100,13 @@
               </mat-form-field>
             </div>
               <div class="form-group col-6">
-                <input type="date" placeholder="Checkin time" class="form-control" formControlName="checkInTime">
+                  <datetime-popup formControlName="checkInTime" [closeButton]="myCloseOptions"></datetime-popup>
               </div>
+              
         </div>
         <div class="row">
             <div class="form-group col-6">
-                <input type="date" placeholder="Checkout time" class="form-control" formControlName="checkOutTime">
+                <input type="datetime-local" placeholder="Checkout time" class="form-control" formControlName="checkOutTime">
             </div>
             <div class="col-6">
               <mat-form-field>
