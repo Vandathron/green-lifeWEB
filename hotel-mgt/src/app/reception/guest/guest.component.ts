@@ -8,10 +8,12 @@ import { map } from 'rxjs/operators';
 import { GuestService } from '../../services/guest.service';
 import { formatDate } from '@angular/common';
 import { ReportService } from '../../services/report.service';
+import { firestore } from 'firebase';
 
 @Component({
   selector: 'app-guest',
   templateUrl: './guest.component.html',
+  
   styleUrls: ['./guest.component.scss']
 })
 export class GuestComponent implements OnInit, AfterViewInit {
@@ -111,6 +113,8 @@ export class GuestComponent implements OnInit, AfterViewInit {
   }
 
   saveGuest(){
+    console.log(this.guestForm.value);
+
     this.guestForm.addControl("totalBill", this.fb.control(this.guestForm.get("room").value.roomPrice));
     this.guestForm.addControl("paidBill", this.fb.control(this.guestForm.get("roomPaid").value? this.guestForm.get("room").value.roomPrice: 0));
     this.guestForm.addControl("roomID",this.fb.control(this.guestForm.get("room").value.id));
@@ -137,6 +141,7 @@ export class GuestComponent implements OnInit, AfterViewInit {
   }
 
   openModal(content, options){
+    this.emptyRooms = [];
     this.guestForm.addControl("room", this.fb.control(null));
     this.modalService.open(content, options);
     this.roomService.filterRooms("status",  "available")
@@ -172,11 +177,23 @@ export class GuestComponent implements OnInit, AfterViewInit {
     
   }
   formatD(date){
-    return formatDate(date, 'dd MMM yyyy hh:mm a', 'en');
+    if(typeof date == "string"){
+      return formatDate(date, 'dd MMM yyyy hh:mm a', 'en');
+    }else{
+      return formatDate(new Date(date.seconds*1000), 'dd MMM yyyy hh:mm a', 'en');
+    }
   }
 
   saveReport(){
 
+  }
+
+  updateBill(guest){
+    this.guestService.updateGuest(guest.id, {
+      paidBill: guest.totalBill
+    }).then(res => {
+      this.getGuests();
+    })
   }
 
 }

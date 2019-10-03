@@ -22,6 +22,7 @@ export class OrdersComponent implements OnInit {
   isBillPlaced: boolean = true;
   savedItems: IItem[];
   loaded: boolean = false;
+  orderIsProcesssed: boolean = false;
   orderIsByGuest: boolean;
   placeOrders = [];
   totalValue: number = 0;
@@ -119,15 +120,14 @@ export class OrdersComponent implements OnInit {
   }
 
   loadGuests(){
-    this.guestService.getGuests().pipe(
-      map(guests => {
+    this.guestService.queryGuest("status", "checkedin").
+      then(guests => {
         guests.forEach(guest => {
           const g = guest.data();
           g.id = guest.id;
           this.guests.push(g);
         });
       })
-    ).subscribe();
   }
 
   reset(){
@@ -135,10 +135,11 @@ export class OrdersComponent implements OnInit {
     this.selectedItems.setValue(null);
     this.orderedItems = [];
     this.placeOrders = [];
+    this.totalValue = 0;
   }
 
   printOrder(){
-    if(this.orderIsByGuest){
+    this.orderIsProcesssed = true;
         var report = {
           guestName: this.selectedGuest.value.name,
           items: this.orderedItems,
@@ -148,9 +149,10 @@ export class OrdersComponent implements OnInit {
         }
         this.reportService.setReport(report, this.selectedGuest.value.id).subscribe(cb => {
           console.log("successful!")
+          this.orderIsProcesssed = false;
           //When above is successful, update guest balance
           this.guestService.updateGuest(this.selectedGuest.value.id, {
-            paidBill: firestore.FieldValue.increment(this.isBillPlaced? this.totalValue: 0),
+            paidBill: firestore.FieldValue.increment(this.isBillPlaced? 0: this.totalValue),
             totalBill: firestore.FieldValue.increment(this.totalValue),
             restaurantBill:  firestore.FieldValue.increment(this.orderType == "restaurant"?this.totalValue: 0),
             barBill: firestore.FieldValue.increment(this.orderType == "bar"? this.totalValue: 0)
@@ -158,9 +160,7 @@ export class OrdersComponent implements OnInit {
           
           .then(onUpdated => this.reset()).catch(onErro => console.log(onErro));
         })
-    }else {
 
-    }
   }
 
   deleteSavedItem(item){

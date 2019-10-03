@@ -61,6 +61,7 @@ export class RoomsComponent implements OnInit {
     this.room.addControl('roomType', this.fb.control(this.selectedRoomType));
     this.roomService.saveRoom(this.room.value)
     .then(cb => {
+      this.getRooms();
       console.log(cb.id + "=> " + "Saved successfully");
     }).catch(err => console.log("Error save", err));
   }
@@ -77,7 +78,14 @@ export class RoomsComponent implements OnInit {
     this.modalService.open(content, {centered: true, windowClass: options.windowClass});
   }
 
+  resetRooms(){
+    this.bookedRooms = [];
+    this.checkedInRooms = [];
+    this.emptyRooms = [];
+  }
+
   getRooms(){
+    
     this.guestService.getGuests().pipe(
       map(guests => {
         guests.docs.map(doc => this.sortRooms(doc.data()))
@@ -86,7 +94,7 @@ export class RoomsComponent implements OnInit {
 
     this.roomService.getRooms().pipe(
       map(rooms => {
-        this.emptyRooms = rooms.docs.filter(room => room.data().status == "unavailable");
+        this.emptyRooms = rooms.docs.filter(room => room.data().status == "available");
       })
     ).subscribe();
   }
@@ -121,8 +129,12 @@ export class RoomsComponent implements OnInit {
     }).catch(err => console.log(err));
   }
 
-  formatD(date: string){
-    return formatDate(date, 'mm-dd hh:mm a', 'en')
+  formatD(date){
+    if(typeof date == "string"){
+      return formatDate(date, 'dd MMM yy hh:mm a', 'en');
+    }else{
+      return formatDate(new Date(date.seconds*1000), 'dd MMM yy hh:mm a', 'en');
+    }
   }
 
   isCheckoutDue(guest: IGuest){

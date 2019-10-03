@@ -23,7 +23,7 @@
     <tbody>
       <tr *ngFor="let guest of checkInGuest">
         <td>{{guest.name}}</td><td>{{guest.roomInfo.roomNo}}</td><td>{{guest.roomInfo.roomType}}</td><td>{{guest.phone}}</td><td>{{guest.email}}</td><td>{{guest.roomInfo.roomPrice}}</td><td>{{guest.paymentType}}</td><td>{{formatD(guest.checkInTime)}}</td><td>{{formatD(guest.checkOutTime)}}</td>
-        <td><button type="button" class="btn-danger btn" (click)="checkOutGuest(guest)">Checkout</button></td>
+        <td><button type="button" class="btn-danger btn" (click)="checkOutGuest(guest)">Checkout</button><button type="button" [disabled] = 'guest.paidBill == guest.totalBill' class="btn-danger btn" (click)="updateBill(guest)">Pay outstanding</button></td>
       </tr>
     </tbody>
   </table>
@@ -48,7 +48,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let guest of bookedGuest">
-        <td>{{guest.name}}</td><td>{{guest.roomInfo.roomNo}}</td><td>{{guest.roomInfo.roomType}}</td><td>{{guest.phone}}</td><td>{{guest.email}}</td><td>{{guest.roomInfo.roomPrice}}</td><td>{{guest.paymentType}}</td><td>{{guest.checkInTime}}</td><td>{{guest.checkOutTime}}</td><td><button type="button" class="btn btn-danger" (click)="cancelBooking(guest)">Cancel booking</button> <button class="btn btn-primary" (click)="checkInGuestMethod(guest)">Check in</button></td>
+        <td>{{guest.name}}</td><td>{{guest.roomInfo.roomNo}}</td><td>{{guest.roomInfo.roomType}}</td><td>{{guest.phone}}</td><td>{{guest.email}}</td><td>{{guest.roomInfo.roomPrice}}</td><td>{{guest.paymentType}}</td><td>{{formatD(guest.checkInTime)}}</td><td>{{formatD(guest.checkOutTime)}}</td><td><button type="button" class="btn btn-danger" (click)="cancelBooking(guest)">Cancel booking</button> <button class="btn btn-primary" (click)="checkInGuestMethod(guest)">Check in</button></td>
       </tr>
     </tbody>
   </table>
@@ -100,7 +100,8 @@
               </mat-form-field>
             </div>
               <div class="form-group col-6">
-                  <datetime-popup formControlName="checkInTime" [closeButton]="myCloseOptions"></datetime-popup>
+                <!-- <datetime-popup formControlName="checkInTime" [closeButton]="myCloseOptions"></datetime-popup> -->
+                <input type="datetime-local" placeholder="Checkin time" class="form-control" value="2019-01-01, 01:0100" formControlName="checkInTime">
               </div>
               
         </div>
@@ -118,7 +119,7 @@
               </mat-form-field>
             </div>
         </div>
-        <button class="btn btn-primary pull-right" type="submit">Save guest</button>
+        <button class="btn btn-primary pull-right" [disabled]="guestForm.invalid" type="submit">Save guest</button>
       </div>
     </div>
   </form>

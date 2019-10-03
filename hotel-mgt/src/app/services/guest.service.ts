@@ -29,4 +29,8 @@ export class GuestService {
   deleteGuest(guest){
     return this.fireStore.collection("guests").doc(guest.id).delete();
   }
+
+  queryGuest(property: string , value: string){
+    return this.fireStore.firestore.collection("guests").where(property, "==", value).get();
+  }
 }

@@ -2,49 +2,48 @@
   <h2 class="font-weight-bold"><i class="fa fa-bed fa-2x"></i>
     Rooms
     <button type="button" class="pull-right btn btn-primary mr-2" (click)="open(newRoomModal, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; New room</button>
-    <button type="button" class="pull-right btn btn-primary mr-2" (click)="open(bookModal, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; Book</button>
+    <!-- <button type="button" class="pull-right btn btn-primary mr-2" (click)="open(bookModal, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; Book</button> -->
   </h2>
 
-  <div class="row">
-    Checked in
-    <div class="col-3 card border-0 p-0 mr-3" *ngFor="let guest of checkedInRooms" >
-        <div class="card-header text-dark p-0 border-0">
-          <span class="ml-1">Room {{guest.roomNo}}</span><span class="mr-1 pull-right text-danger">{{isCheckoutDue(guest) ? "Check out due": ""}}</span>
+  <div class="row mb-4">
+    <h3 class="col-12 text-dark font-size-2">Check ins</h3>
+    <div class="col-3 card border-0 p-0 mr-3 mb-3 shadow rounded" *ngFor="let guest of checkedInRooms" >
+        <div class="card-header text-dark p-0 border-0 checkin">
+          <span class="ml-1">Room {{guest.roomNo}}</span><span class="mr-1 pull-right text-danger">{{isCheckoutDue(guest) ? "Check out due": " "}}</span>
         </div>
-        <div class="card-body text-center text-dark">
-          <i class="fa fa-user-circle fa-3x"></i><span class="name">{{guest.name}}</span>
+        <div class="card-body text-center text-dark checkin">
+          <i class="fa fa-user-circle fa-2x"></i><span class="name">{{guest.name}}</span>
         </div>
-        <div class="footer p-1 text-dark d-inline-flex">
-          <i class="fa fa-2x fa-calendar"></i><h3 class="ml-2">{{formatD(guest.checkInTime) + '--' + formatD(guest.checkOutTime)}}</h3><i class="ml-2 fa-2x fa fa-check-circle"></i>
+        <div class="footer p-1 d-inline-flex">
+          <i class="fa fa-2x fa-calendar"></i><p class="ml-2">{{formatD(guest.checkInTime) + '--' + formatD(guest.checkOutTime)}}</p><i class="ml-2 fa-2x fa fa-check-circle"></i>
         </div>
       </div>
   </div>
-  <div class="row">
-    Booked
-        <div class="col-3 card border-0 p-0 mr-3" *ngFor="let guest of bookedRooms" >
-            <div class="card-header text-dark p-0 border-0">
+  <div class="row mb-4">
+    <h3 class="col-12 text-dark font-size-2">Booked rooms</h3>
+        <div class="col-3 card border-0 p-0 mr-3 mb-3 shadow rounded" *ngFor="let guest of bookedRooms" >
+            <div class="card-header p-0 border-0 booked">
               <span class="ml-1">Room {{guest.roomNo}}</span>
             </div>
-            <div class="card-body text-center text-dark">
-              <i class="fa fa-user-circle fa-3x"></i><span class="name">{{guest.name}}</span>
+            <div class="card-body text-center text-dark booked">
+              <i class="fa fa-user-circle fa-2x"></i><span class="name">{{guest.name}}</span>
             </div>
             <div class="footer p-1 text-dark d-inline-flex">
-              <i class="fa fa-2x fa-calendar"></i><h3 class="ml-2">{{guest.checkInTime + '--' + guest.checkOutTime}}</h3><i class="ml-2 fa-2x fa fa-check-circle"></i>
+              <i class="fa fa-2x fa-calendar"></i><p class="ml-2">{{formatD(guest.checkInTime) + '-' + formatD(guest.checkOutTime)}}</p><i class="ml-2 fa-2x fa fa-check-circle"></i>
             </div>
           </div>
   </div>
 
-  <div class="row">
-    Empty rooms
-        <div class="col-3 card border-0 p-0 mr-3" *ngFor="let room of emptyRooms" >
-            <div class="card-header text-dark p-0 border-0">
+  <div class="row mb-4">
+    <h3 class="col-12 text-dark font-size-2">Empty rooms</h3>
+        <div class="col-3 card border-0 p-0 mr-3 mb-3 shadow rounded bg-light" *ngFor="let room of emptyRooms" >
+            <div class="card-header text-dark p-0 border-0 empty">
               <span class="ml-1">Room {{room.data().roomNo}}</span>
             </div>
-            <div class="card-body text-center text-dark">
-              <i class="fa fa-user-circle fa-3x"></i><span class="name">Available</span>
+            <div class="card-body text-center text-dark empty">
+              <i class="fa fa-user-circle fa-2x"></i><span class="name">Available</span>
             </div>
             <div class="footer p-1 text-dark d-inline-flex">
-              <i class="fa fa-2x fa-calendar"></i><h3 class="ml-2"></h3><i class="ml-2 fa-2x fa fa-check-circle"></i>
             </div>
           </div>
   </div>
@@ -88,7 +87,7 @@
           </mat-radio-group>
         </div>
         <button class="btn btn-primary pull-right" type="submit">Add room</button>
-        <button type="button" (click)="closeModal()" class="btn btn-danger pull-right">Cancel</button>
+        <button type="button" (click)="closeModal()" class="btn btn-danger pull-right mr-2">Cancel</button>
     </form>
       </div>
 </div>

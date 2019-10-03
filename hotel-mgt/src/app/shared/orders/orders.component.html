@@ -4,13 +4,15 @@
   <!-- <button type="button" class="pull-right btn btn-primary" (click)="open(placeOrderModal, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; Place order</button> -->
 </h4>
 
-
+<div class="overlay" *ngIf="orderIsProcesssed">
+<mat-progress-spinner class="spinner" [mode]="'indeterminate'" [color]="'#a7ef8a'" ></mat-progress-spinner>
+</div>
 <div class="container-fluid mt-5">
   <div class="row">
     <div class="col-lg-8">
       <mat-form-field>
           <mat-label>Select orders</mat-label>
-          <mat-select multiple [formControl] = "selectedItems" >
+          <mat-select multiple [formControl] = "selectedItems">
             <mat-option *ngFor="let item of savedItems" [value]="item" >
               {{item.itemName}}/{{item.itemPrice}}
             </mat-option>
@@ -43,7 +45,7 @@
       </div> -->
 
       <div class="row">
-        <button class="col-12 btn btn-dark" (click)="addToOrderView()">
+        <button class="col-12 btn btn-dark" (click)="addToOrderView()" [disabled]="!(selectedGuest.value && selectedItems.value.length > 0)">
           Place order
         </button>
       </div>
@@ -69,7 +71,7 @@
         Total: {{totalValue}}
       </div>
       <div class="row">
-          <button class="btn col-12 align-self-center btn-dark" (click) = "printOrder()">Check out/Pay</button>
+          <button class="btn col-12 align-self-center btn-dark" [disabled]="orderedItems.length  < 1" (click) = "printOrder()">Check out/Pay</button>
       </div>
     </div>
   </div>
