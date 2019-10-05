@@ -9,6 +9,8 @@ import { GuestService } from '../../services/guest.service';
 import { formatDate } from '@angular/common';
 import { ReportService } from '../../services/report.service';
 import { firestore } from 'firebase';
+import * as numeral from 'numeral';
+
 
 @Component({
   selector: 'app-guest',
@@ -40,6 +42,8 @@ export class GuestComponent implements OnInit, AfterViewInit {
   selectedRoom;
   emptyRooms = [];
   guestTableData;
+  roomPrice  = 0;
+  savingGuest: boolean = false;
  
   //Tables
   guests: IGuest[] = [];
@@ -59,12 +63,12 @@ export class GuestComponent implements OnInit, AfterViewInit {
     phone: [null, [Validators.required]],
     email: ['', [Validators.email]],
     paymentType: ['', [Validators.required]],
-    roomNo: [null, [Validators.required]],
-    checkInTime: [new Date(), [Validators.required]],
-    checkOutTime: [new Date(), [Validators.required]],
+    checkInTime: ['', [Validators.required]],
+    checkOutTime: ['', [Validators.required]],
     room: [null, [Validators.required]],
     status: [null, [Validators.required]],
-    roomPaid: [true, [Validators.required]]
+    roomPaid: [true, [Validators.required]],
+    roomPrice: [null, [Validators.required]]
   });
 
 
@@ -77,25 +81,23 @@ export class GuestComponent implements OnInit, AfterViewInit {
     
   }
   getGuests(){
-    this.bookedGuest = [];
-    this.checkInGuest = [];
-    this.guestService.getGuests().pipe(
-      map(guest => {
-        guest.docs.map(
-          guest => {
-            const g = guest.data();
-            g.id = guest.id;
-            this.roomService.getRoom(g.roomID)
-            .pipe(
-              map(r => {
-                g.roomInfo = r.data();
-                this.sortGuests(g);
-              })
-            ).subscribe();
-          }
-        )
-      })
-    ).subscribe();
+    this.savingGuest = true;
+    this.resetData();
+    this.guestService.getGuests().then(guest => {
+      guest.docs.map(
+        guest => {
+          const g = guest.data();
+          g.id = guest.id;
+          this.roomService.getRoom(g.roomID)
+          .pipe(
+            map(r => {
+              g.roomInfo = r.data();
+              this.sortGuests(g);
+              this.savingGuest = false;
+            })
+          ).subscribe();
+    })
+  }).catch(err => console.log(err));
   }
 
   sortGuests(guest){
@@ -115,11 +117,12 @@ export class GuestComponent implements OnInit, AfterViewInit {
   saveGuest(){
     console.log(this.guestForm.value);
 
-    this.guestForm.addControl("totalBill", this.fb.control(this.guestForm.get("room").value.roomPrice));
-    this.guestForm.addControl("paidBill", this.fb.control(this.guestForm.get("roomPaid").value? this.guestForm.get("room").value.roomPrice: 0));
+    this.guestForm.addControl("totalBill", this.fb.control(this.guestForm.get("roomPrice").value));
+    this.guestForm.addControl("paidBill", this.fb.control(this.guestForm.get("roomPaid").value? this.guestForm.get("roomPrice").value: 0));
     this.guestForm.addControl("roomID",this.fb.control(this.guestForm.get("room").value.id));
     this.guestForm.addControl("roomNo",this.fb.control(this.guestForm.get("room").value.roomNo));
     this.guestForm.removeControl("room");
+    this.savingGuest = true;
     this.guestService.saveGuest(this.guestForm.value).then(cb => {
       // this.reportService.saveToReport({
       //   guestName: this.guestForm.value.name,
@@ -161,8 +164,10 @@ export class GuestComponent implements OnInit, AfterViewInit {
   }
 
   cancelBooking(guest){
+    this.savingGuest = true;
     this.guestService.deleteGuest(guest)
     .then(onSuc => {
+      this.savingGuest = false;
       console.log("Deleted successfully");
       this.roomService.updateRoom(guest.roomID, {status: "available"})
       .then(onSuc => this.getGuests()).catch(err => console.log(err));
@@ -174,6 +179,15 @@ export class GuestComponent implements OnInit, AfterViewInit {
   }
 
   checkOutGuest(guest){
+    this.savingGuest = true;
+    this.guestService.updateGuest(guest.id, {
+      status: "checkout"
+    }).then(cb => {
+      this.savingGuest = false;
+      this.roomService.updateRoom(guest.roomID, {status: "available"}).then(cb => {
+      })
+      this.getGuests();
+    })
     
   }
   formatD(date){
@@ -189,11 +203,18 @@ export class GuestComponent implements OnInit, AfterViewInit {
   }
 
   updateBill(guest){
+    this.savingGuest = true;
     this.guestService.updateGuest(guest.id, {
       paidBill: guest.totalBill
     }).then(res => {
+      this.savingGuest = false;
       this.getGuests();
     })
   }
+
+  formatPrice(price, dropDecimals = false) {
+    return numeral(price).format(dropDecimals ? '0,0' : '0,0.00');
+  }
+
 
 }

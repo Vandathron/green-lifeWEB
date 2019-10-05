@@ -13,7 +13,7 @@ export class GuestService {
 
 
   getGuests(){
-    return this.fireStore.collection('guests').get();
+    return this.fireStore.collection('guests').get().toPromise();
   }
   saveGuest(guest: IGuest){
     return this.fireStore.collection('guests').add(guest);
@@ -33,4 +33,7 @@ export class GuestService {
   queryGuest(property: string , value: string){
     return this.fireStore.firestore.collection("guests").where(property, "==", value).get();
   }
+
+
+  
 }

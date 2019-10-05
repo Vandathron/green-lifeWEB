@@ -4,10 +4,13 @@
     <button type="button" class="pull-right btn btn-primary mr-2" (click)="open(newRoomModal, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; New room</button>
     <!-- <button type="button" class="pull-right btn btn-primary mr-2" (click)="open(bookModal, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; Book</button> -->
   </h2>
+  <div class="overlay" *ngIf="loading">
+      <mat-progress-spinner class="spinner" [mode]="'indeterminate'" [color]="'#a7ef8a'" ></mat-progress-spinner>
+  </div>
 
-  <div class="row mb-4">
-    <h3 class="col-12 text-dark font-size-2">Check ins</h3>
-    <div class="col-3 card border-0 p-0 mr-3 mb-3 shadow rounded" *ngFor="let guest of checkedInRooms" >
+  <div class="row mb-4 ">
+    <h3 class="col-12 text-dark font-size-2">Check-ins</h3>
+    <div class="col-lg-3 col-md-4 col-sm-6 card border-0 p-0 mr-lg-1 mr-sm-0  mb-3 shadow rounded" *ngFor="let guest of checkedInRooms" >
         <div class="card-header text-dark p-0 border-0 checkin">
           <span class="ml-1">Room {{guest.roomNo}}</span><span class="mr-1 pull-right text-danger">{{isCheckoutDue(guest) ? "Check out due": " "}}</span>
         </div>
@@ -21,7 +24,7 @@
   </div>
   <div class="row mb-4">
     <h3 class="col-12 text-dark font-size-2">Booked rooms</h3>
-        <div class="col-3 card border-0 p-0 mr-3 mb-3 shadow rounded" *ngFor="let guest of bookedRooms" >
+        <div class="col-lg-3 col-md-4 col-sm-6 card border-0 p-0 mr-lg-1 mr-sm-0  mb-3 shadow rounded" *ngFor="let guest of bookedRooms" >
             <div class="card-header p-0 border-0 booked">
               <span class="ml-1">Room {{guest.roomNo}}</span>
             </div>
@@ -36,9 +39,9 @@
 
   <div class="row mb-4">
     <h3 class="col-12 text-dark font-size-2">Empty rooms</h3>
-        <div class="col-3 card border-0 p-0 mr-3 mb-3 shadow rounded bg-light" *ngFor="let room of emptyRooms" >
+        <div class="col-lg-3 col-md-4 col-sm-6 card border-0 p-0 mr-lg-1 mr-sm-0  mb-3 shadow rounded bg-light" *ngFor="let room of emptyRooms" >
             <div class="card-header text-dark p-0 border-0 empty">
-              <span class="ml-1">Room {{room.data().roomNo}}</span>
+              <span class="ml-1">Room {{room.roomNo}}</span>
             </div>
             <div class="card-body text-center text-dark empty">
               <i class="fa fa-user-circle fa-2x"></i><span class="name">Available</span>
@@ -79,14 +82,8 @@
         <div class="form-group">
           <input type="number" class="form-control" placeholder="Price" formControlName="roomPrice">
         </div>
-        <div class="form-group">
-          <mat-radio-group formControlName="status">
-            <mat-radio-button value="available">Available</mat-radio-button>
-            <mat-radio-button value="unavailabe">Unavailable</mat-radio-button>
-            <mat-radio-button value="booked">Booked</mat-radio-button>
-          </mat-radio-group>
-        </div>
-        <button class="btn btn-primary pull-right" type="submit">Add room</button>
+        
+        <button class="btn btn-primary pull-right" type="submit" [disabled]="!room.valid">Add room</button>
         <button type="button" (click)="closeModal()" class="btn btn-danger pull-right mr-2">Cancel</button>
     </form>
       </div>

@@ -5,7 +5,9 @@
   z-index: 99999 !important;
 }
 .cdk-global-overlay-wrapper, .cdk-overlay-container { z-index: 9999!important; } 
-
+.mat-progress-spinner circle, .mat-spinner circle {
+  stroke: #a7ef8a;
+  }
 @mixin keyframes($name) {
   @-webkit-keyframes #{$name} {
     @content;

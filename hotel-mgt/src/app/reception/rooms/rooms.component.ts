@@ -21,6 +21,7 @@ export class RoomsComponent implements OnInit {
   ];
   roomsInfo: IRoomGuest[] = [];
   bookedRoomNo;
+  loading: boolean = false;
 
   currentTime: number = new Date().getTime()*1000;
 
@@ -32,7 +33,7 @@ export class RoomsComponent implements OnInit {
   room = this.fb.group({
     roomNo: [null, [Validators.required]],
     roomPrice: [null, [Validators.required]],
-    status: ['available', [Validators.required]]
+    status: ['available']
   })
 
   bookForm = this.fb.group({
@@ -85,18 +86,15 @@ export class RoomsComponent implements OnInit {
   }
 
   getRooms(){
-    
-    this.guestService.getGuests().pipe(
-      map(guests => {
+    this.resetRooms();
+    this.loading = true;
+    this.guestService.getGuests().then(
+      guests => {
         guests.docs.map(doc => this.sortRooms(doc.data()))
-      })
-    ).subscribe();
-
-    this.roomService.getRooms().pipe(
-      map(rooms => {
-        this.emptyRooms = rooms.docs.filter(room => room.data().status == "available");
-      })
-    ).subscribe();
+      this.loading = false;
+      }
+    )
+    this.roomService.queryRoom("status", "available").then(docs => docs.forEach(doc => this.emptyRooms.push(doc.data())))
   }
 
   sortRooms(guest){

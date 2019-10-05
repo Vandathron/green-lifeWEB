@@ -1,9 +1,9 @@
 <div class="container">
   <div class="row mb-3">
-    <div class="col-3 card p-2 restaurant">
+    <div class="col-lg-3 col-md-5 col-sm-6 card p-2 restaurant">
         <div class="row">
           <div class="col-6 text-center number">
-            50
+            <span>&#8358;</span>{{formatPrice(cardData.restaurantSales)}}
           </div>
           <div class="col-6 text-big text-right">
             <i class="fa fa-cutlery fa-3x opacity-50"></i>
@@ -13,10 +13,10 @@
           <div class="col-12 text-center ">Restaurant</div>
         </div>
     </div>
-    <div class="col-3 card p-2 offset-1 reception">
+    <div class="col-lg-3 col-md-5 col-sm-6 card p-2 offset-lg-1 offset-md-0 reception">
       <div class="row">
         <div class="col-6 text-center number">
-          50
+          <span>&#8358;</span>{{formatPrice(cardData.recepSales)}}
         </div>
         <div class="col-6 text-big text-right">
           <i class="fa fa-hotel fa-3x"></i>
@@ -26,10 +26,10 @@
         <div class="col-12 text-center ">Reception</div>
       </div>
     </div>
-    <div class="col-3 card p-2 offset-1 bar">
+    <div class="col-lg-3 col-md-5 col-sm-6 card p-2 offset-lg-1 offset-md-0 bar">
       <div class="row">
         <div class="col-6 text-center number">
-          50
+          <span>&#8358;</span>{{formatPrice(cardData.barSales)}}
         </div>
         <div class="col-6 text-big text-right bar">
           <i class="fas fa-wine-bottle fa-3x"></i>
@@ -41,10 +41,10 @@
     </div>
   </div>
   <div class="row mt-3">
-    <div class="col-3 card p-2 empty-room">
+    <div class="col-lg-3 col-md-5 col-sm-6 card p-2 empty-room">
       <div class="row">
         <div class="col-6 text-center number">
-          50
+          {{cardData.availableRooms}}
         </div>
         <div class="col-6 text-big text-right">
           <i class="fa fa-bed fa-3x"></i>
@@ -54,10 +54,10 @@
         <div class="col-12 text-center ">Available rooms</div>
       </div>
     </div>
-    <div class="col-3 offset-1 card p-2 check-ins">
+    <div class="col-lg-3 col-md-5 col-sm-6 offset-lg-1 offset-md-0 card p-2 check-ins">
       <div class="row">
         <div class="col-6 text-center number">
-          50
+          {{cardData.checkIns}}
         </div>
         <div class="col-6 text-big text-right">
           <i class="fa fa-warehouse fa-3x"></i>
@@ -67,10 +67,10 @@
         <div class="col-12 text-center "> Check ins</div>
       </div>
     </div>
-    <div class="col-3 offset-1 card p-2 bookings">
+    <div class="col-lg-3 col-md-5 col-sm-6 offset-lg-1 offset-md-0 card p-2 bookings">
       <div class="row">
         <div class="col-6 text-center number">
-          50
+          {{cardData.bookings}}
         </div>
         <div class="col-6 text-big text-right">
           <i class="fa fa-address-book fa-3x"></i>

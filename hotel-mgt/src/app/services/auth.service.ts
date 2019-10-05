@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,8 @@ import { AngularFireAuth } from '@angular/fire/auth';
 export class AuthService {
 
   constructor(
-    private fireAuth: AngularFireAuth
+    private fireAuth: AngularFireAuth,
+    private router: Router
   ) { 
 
   }
@@ -18,13 +20,13 @@ export class AuthService {
 
   onlogout(){
     this.fireAuth.auth.signOut().then(logOutSuccessful => {
-      localStorage.removeItem("LoggedInUser")
-      console.log("Logged out successfuly");
+      localStorage.removeItem("LoggedInUser");
+      this.router.navigateByUrl("/login");
     })
   }
 
   login(username: string, password: string){
-    return this.fireAuth.auth.signInWithEmailAndPassword(username, password)
+    return this.fireAuth.auth.signInWithEmailAndPassword(username, password);
   };
 }
   

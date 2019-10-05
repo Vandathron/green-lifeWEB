@@ -10,6 +10,7 @@ import { ReportService } from '../../services/report.service';
 // import { AngularFirestore,   AngularFirestoreCollection } from '@angular/fire/firestore';
 import { firestore } from 'firebase';
 import { isUndefined } from 'util';
+import * as numeral from 'numeral';
 
 @Component({
   selector: 'app-orders',
@@ -26,6 +27,7 @@ export class OrdersComponent implements OnInit {
   orderIsByGuest: boolean;
   placeOrders = [];
   totalValue: number = 0;
+  loggedInUser;
   @Input("orderType") orderType: string;
 
 
@@ -55,6 +57,7 @@ export class OrdersComponent implements OnInit {
     private reportService: ReportService,
     private guestService: GuestService,
   ) {
+    this.loggedInUser = JSON.parse(localStorage.getItem("LoggedInUser"));
    }
 
   ngOnInit() {
@@ -149,7 +152,11 @@ export class OrdersComponent implements OnInit {
         }
         this.reportService.setReport(report, this.selectedGuest.value.id).subscribe(cb => {
           console.log("successful!")
+          this.orderService.updateStaffSale(this.loggedInUser.id, {
+            totalSale: firestore.FieldValue.increment(this.totalValue)
+          }).then(cb => console.log("Successfully updated"))
           this.orderIsProcesssed = false;
+
           //When above is successful, update guest balance
           this.guestService.updateGuest(this.selectedGuest.value.id, {
             paidBill: firestore.FieldValue.increment(this.isBillPlaced? 0: this.totalValue),
@@ -179,6 +186,9 @@ export class OrdersComponent implements OnInit {
   }
   decreaseTotal(item){
     item.itemQuantity > 1? (this.totalValue -= item.itemPrice, item.itemQuantity -=1): console.log("cannot");
+  }
+  formatPrice(price, dropDecimals = false) {
+    return numeral(price).format(dropDecimals ? '0,0' : '0,0.00');
   }
 
 

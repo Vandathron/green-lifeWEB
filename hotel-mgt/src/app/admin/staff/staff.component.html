@@ -2,13 +2,15 @@
   Staffs
   <button type="button" class="pull-right btn btn-primary" (click)="openModal(newStaff, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; Add Staff</button>
 </h4>
-
+<div class="overlay" *ngIf="loading">
+    <mat-progress-spinner class="spinner" [mode]="'indeterminate'" [color]="'#a7ef8a'" ></mat-progress-spinner>
+</div>
 <div class="container-fluid mt-5">
     <div class="row mr-3 ml-3 border border-2 mb-1 p-2" *ngFor="let staff of staffs">
         <div class="col col-3">
           <div class="images-container text-center">
             <h5>{{staff.username}}</h5>
-            <i class="fa fa-user " style="font-size: 10em;" *ngIf="loaded"></i>
+            <i class="fa fa-user " style="font-size: 10em;" *ngIf="iconLoaded"></i>
           </div>
         </div>
         <div class="col col-3">
@@ -28,7 +30,7 @@
               <h5>Department: {{staff.department}}</h5>
             </div>
             <div class="col col-6">
-              <h5>Total sales: {{staff.totalSale}}</h5>
+              <h5>Total sales: <span>&#8358;</span>{{formatPrice(staff.totalSale)}}</h5>
             </div>
           </div>
           <div class="row">
@@ -40,7 +42,7 @@
             </div>
           </div>
           <div class="row">
-            <button class=" btn btn-primary col-5">
+            <button class=" btn btn-primary col-5" disabled>
               Edit
             </button>
             <button class=" btn btn-danger col-5 offset-1" (click)="openModal(deleteStaf, {windowClass: 'modal-lg animate'}, staff)">
@@ -105,6 +107,7 @@
           <div class="form-group">
               <input type="number" placeholder="Phone number" class="form-control" formControlName="phone">
             </div>
+            <input type="number" value="0" formControlName = "totalSale" hidden>
         </div>
         <div class="card-footer">
           <button class="btn green pull-right" type="submit" [disabled]="staffForm.invalid">

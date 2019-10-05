@@ -14,7 +14,7 @@
           <mat-label>Select orders</mat-label>
           <mat-select multiple [formControl] = "selectedItems">
             <mat-option *ngFor="let item of savedItems" [value]="item" >
-              {{item.itemName}}/{{item.itemPrice}}
+              {{item.itemName}} / <span>&#8358;</span>{{formatPrice(item.itemPrice)}}
             </mat-option>
           </mat-select>
        </mat-form-field>
@@ -63,12 +63,12 @@
         </thead>
         <tbody>
           <tr *ngFor="let ordered of orderedItems; let i = index">
-            <td>{{ordered.itemName}}</td><td>{{ordered.itemPrice}}</td><td>{{ordered.itemQuantity}}</td><td><i class="fa fa-plus" (click)="increaseTotal(ordered)"></i><i class="fa fa-minus d-block" (click)="decreaseTotal(ordered)"></i></td>
+            <td>{{ordered.itemName}}</td><td><span>&#8358;</span>{{formatPrice(ordered.itemPrice)}}</td><td>{{ordered.itemQuantity}}</td><td><i class="fa fa-plus" (click)="increaseTotal(ordered)"></i><i class="fa fa-minus d-block" (click)="decreaseTotal(ordered)"></i></td>
           </tr>
         </tbody>
       </table>
       <div class="text-center">
-        Total: {{totalValue}}
+        Total: <span>&#8358;</span>{{formatPrice(totalValue)}}
       </div>
       <div class="row">
           <button class="btn col-12 align-self-center btn-dark" [disabled]="orderedItems.length  < 1" (click) = "printOrder()">Check out/Pay</button>
@@ -85,7 +85,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of savedItems">
-            <td>{{item.itemName}}</td><td>{{item.itemPrice}}</td><td><i class="fa fa-trash" (click)="deleteSavedItem(item)"></i></td>
+            <td>{{item.itemName}}</td><td><span>&#8358;</span>{{formatPrice(item.itemPrice)}}</td><td><i class="fa fa-trash" (click)="deleteSavedItem(item)"></i></td>
           </tr>
         </tbody>
       </table>

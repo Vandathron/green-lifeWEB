@@ -1,23 +1,92 @@
 <h4 class="font-weight-bold">
-  My daily report
+  Reports
 </h4>
 
 <div class="table-responsive">
   <table class="table table-dark table-hover">
     <thead>
       <tr>
-        <th>Guest</th><th>Bar bill</th><th>Restaurant bill</th><th>Total bill paid</th><th>Total bill</th><th>Outstanding bill</th>
+        <th>Guest</th><th>Reception bill</th><th>Bar bill</th><th>Restaurant bill</th><th>Total bill paid</th><th>Total bill</th><th>Outstanding bill</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let guest of guests">
         <td>{{guest.name}}</td>
-        <td>{{guest.barBill}}</td>
-        <td>{{guest.restaurantBill}}</td>
-        <td>{{guest.paidBill}}</td>
-        <td>{{guest.totalBill}}</td>
-        <td>{{guest.totalBill-guest.paidBill}}</td>
+        <td><span>&#8358;</span>{{formatPrice(guest.roomPrice)}}</td>
+        <td><span>&#8358;</span>{{formatPrice(guest.barBill)}}</td>
+        <td><span>&#8358;</span>{{formatPrice(guest.restaurantBill)}}</td>
+        <td><span>&#8358;</span>{{formatPrice(guest.paidBill)}}</td>
+        <td><span>&#8358;</span>{{formatPrice(guest.totalBill)}}</td>
+        <td><span>&#8358;</span>{{formatPrice(guest.totalBill-guest.paidBill)}}</td>
+        <td><a class="btn btn-danger" (click) = "viewGuestReport(guestRep,guest)">Full report</a></td>
       </tr>
     </tbody>
   </table>
 </div>
+
+<ng-template #guestRep let-c = "close" let-d ="dismiss">
+  <div id="report" class="p-5">
+    <div class="row">
+      <div class="col-12 text-center">
+        {{selectedGuestReport.name}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 col-sm-12 col-xs-12 text-center">
+        Email: {{selectedGuestReport.email}}
+      </div>
+      <div class="col-lg-6 col-sm-12 col-xs-12 text-center">
+        Room no & price: {{selectedGuestReport.roomNo}}  <span>&#8358;</span>{{formatPrice(selectedGuestReport.roomPrice)}}
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-sm-12 col-xs-12 text-center">
+          Check in time: {{formatD(selectedGuestReport.checkInTime)}}
+        </div>
+        <div class="col-lg-6 col-sm-12 col-xs-12 text-center">
+          Check out time: {{formatD(selectedGuestReport.checkOutTime)}}
+        </div>
+      </div>
+      <div class="row">
+        <div class=" col-lg-6 col-sm-12">
+          <div class="table-responsive">
+            <table class="table-bordered table">
+              <thead>
+                <tr>
+                  <th>Items</th><th>Total price</th><th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let bar of guestBarReport">
+                  <td><i *ngFor="let item of bar.items">{{item.itemName}}-<span>&#8358;</span>{{formatPrice(item.itemPrice)}},</i></td><td><span>&#8358;</span>{{formatPrice(bar.totalPrice)}}</td><td>{{bar.date.seconds | date: 'dd MMM yy hh:mm a'}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+        </div>
+      <div class=" col-lg-6 col-sm-12">
+        <div class="table-reponsive">
+            <table class="table-bordered table">
+                <thead>
+                  <tr>
+                    <th>Items</th><th>Total price</th><th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let bar of guestRestaurantReport">
+                      <td><i *ngFor="let item of bar.items">{{item.itemName}}-<span>&#8358;</span>{{formatPrice(item.itemPrice)}},</i></td><td><span>&#8358;</span>{{formatPrice(bar.totalPrice)}}</td><td>{{bar.date.seconds| date: 'dd MMM yy hh:mm a'}}</td>
+                    </tr>
+                  </tbody>
+              </table>
+        </div>
+      </div>
+      </div>
+      <div class="row">
+      <div class="col">
+        <button class="pull-right btn btn-danger" (click)="printReport()">Print</button>
+      </div>
+      </div>
+  </div>
+</ng-template>
+

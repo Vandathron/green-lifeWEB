@@ -6,6 +6,7 @@ import { IUser } from '../../models/user';
 import { map } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 import { AngularFireAuth } from '@angular/fire/auth';
+import * as numeral from 'numeral';
 
 @Component({
   selector: 'app-staff',
@@ -17,7 +18,8 @@ export class StaffComponent implements OnInit {
   selectedDepartment = "bar";
    departments = ["admin", "reception", "restaurant", "bar"
   ];
-  loaded: boolean = false;
+  loading: boolean = false;
+  iconLoaded: boolean = false;
 
 
   staffs: IUser[] = [];
@@ -29,7 +31,8 @@ export class StaffComponent implements OnInit {
     username: ['', [Validators.required]],
     email: ['', [Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
-    phone: [null, [Validators.required, Validators.minLength(11), Validators.maxLength(11)]]
+    phone: [null, [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
+    totalSale: [0]
   })
 
   constructor(
@@ -52,6 +55,7 @@ export class StaffComponent implements OnInit {
   }
 
   addStaff(){
+    this.loading = true;
     this.staffForm.addControl('department', this.fb.control(this.selectedDepartment))
     this.staffService.saveStaff(this.staffForm.value)
     .then(suc => {
@@ -62,6 +66,7 @@ export class StaffComponent implements OnInit {
     })
   }
   getStaffs(){
+    this.loading = true;
     this.staffs = [];
     this.staffService.getStaffs().pipe(
       map(changes => {
@@ -71,7 +76,7 @@ export class StaffComponent implements OnInit {
           this.staffs.push(data);
         })
       })
-    ).subscribe(data => this.loaded = true);
+    ).subscribe(data => {this.loading = false;this.iconLoaded = true});
   }
 
 
@@ -89,6 +94,9 @@ export class StaffComponent implements OnInit {
   }
   closeModal(){
     this.modalService.dismissAll();
+  }
+  formatPrice(price, dropDecimals = false) {
+    return numeral(price).format(dropDecimals ? '0,0' : '0,0.00');
   }
 
 }

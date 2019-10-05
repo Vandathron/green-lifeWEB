@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ReportService } from '../../services/report.service';
+import * as numeral from 'numeral';
 
 @Component({
   selector: 'app-report',
@@ -10,6 +11,7 @@ export class ReportComponent implements OnInit {
 
   @Input("reportType") reportType: string;
    reports = [];
+   today = new Date( new Date().setHours(0,0,0,0)).getTime()/1000;
   constructor(
     private reportService: ReportService
   ) { 
@@ -24,6 +26,7 @@ export class ReportComponent implements OnInit {
     .then(reports => {
       reports.docs.forEach(doc => {
         doc.data().reports.forEach(report => {
+          if(report.date.seconds > this.today)
           if(report.reportType == "bar" && this.reportType=="bar"){
             this.reports.push(report);
           }else if(report.reportType=="restaurant" && this.reportType=="restaurant"){
@@ -31,7 +34,6 @@ export class ReportComponent implements OnInit {
           } 
         })
       })
-      console.log(this.reports);
     }).catch(err => console.log(err));
   }
 
@@ -55,5 +57,8 @@ export class ReportComponent implements OnInit {
     }).catch(err => console.log("error ", err));
   }
 
+  formatPrice(price, dropDecimals = false) {
+    return numeral(price).format(dropDecimals ? '0,0' : '0,0.00');
+  }
 
 }

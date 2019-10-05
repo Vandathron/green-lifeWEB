@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
+import { formatDate } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,6 @@ export class ReportService {
     return this.fireDB.firestore.collection("reports").get();
     
   }
-  
   saveToReport(report){
     return this.fireDB.collection("reports").add(report);
   }
@@ -65,6 +65,13 @@ export class ReportService {
 
   getGuestReport(){
     return this.fireDB.collection("guests").get();
+  }
+
+  getDashboardSales(field: string, department: string){
+    return this.fireDB.firestore.collection("staffs").where(field, "==", department).where("totalSale", ">", 0).get();
+  }
+  getReportByGuest(guestID){
+    return this.fireDB.collection("reports").doc(guestID).get();
   }
 
 }

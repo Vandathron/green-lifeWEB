@@ -2,6 +2,9 @@
   Guests
   <button type="button" class="pull-right btn btn-primary" (click)="openModal(newGuest, { windowClass: 'modal-lg animate' })"><span class="ion ion-md-add"></span>&nbsp; Add guest</button>
 </h4>
+<div class="overlay" *ngIf="savingGuest">
+    <mat-progress-spinner class="spinner" [mode]="'indeterminate'" [color]="'#a7ef8a'" ></mat-progress-spinner>
+</div>
 
 <div class="container-fluid table-responsive">
   <h3>Checked in guest</h3>
@@ -22,8 +25,8 @@
     </thead>
     <tbody>
       <tr *ngFor="let guest of checkInGuest">
-        <td>{{guest.name}}</td><td>{{guest.roomInfo.roomNo}}</td><td>{{guest.roomInfo.roomType}}</td><td>{{guest.phone}}</td><td>{{guest.email}}</td><td>{{guest.roomInfo.roomPrice}}</td><td>{{guest.paymentType}}</td><td>{{formatD(guest.checkInTime)}}</td><td>{{formatD(guest.checkOutTime)}}</td>
-        <td><button type="button" class="btn-danger btn" (click)="checkOutGuest(guest)">Checkout</button><button type="button" [disabled] = 'guest.paidBill == guest.totalBill' class="btn-danger btn" (click)="updateBill(guest)">Pay outstanding</button></td>
+        <td>{{guest.name}}</td><td>{{guest.roomInfo.roomNo}}</td><td>{{guest.roomInfo.roomType}}</td><td>{{guest.phone}}</td><td>{{guest.email}}</td><td><span>&#8358;</span>{{formatPrice(guest.roomInfo.roomPrice)}}</td><td>{{guest.paymentType}}</td><td>{{formatD(guest.checkInTime)}}</td><td>{{formatD(guest.checkOutTime)}}</td>
+        <td><button type="button" class="btn-danger btn" (click)="checkOutGuest(guest)">Checkout</button><button type="button" [disabled] = 'guest.paidBill == guest.totalBill' class="btn-danger btn ml-1" (click)="updateBill(guest)">Pay outstanding</button></td>
       </tr>
     </tbody>
   </table>
@@ -48,7 +51,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let guest of bookedGuest">
-        <td>{{guest.name}}</td><td>{{guest.roomInfo.roomNo}}</td><td>{{guest.roomInfo.roomType}}</td><td>{{guest.phone}}</td><td>{{guest.email}}</td><td>{{guest.roomInfo.roomPrice}}</td><td>{{guest.paymentType}}</td><td>{{formatD(guest.checkInTime)}}</td><td>{{formatD(guest.checkOutTime)}}</td><td><button type="button" class="btn btn-danger" (click)="cancelBooking(guest)">Cancel booking</button> <button class="btn btn-primary" (click)="checkInGuestMethod(guest)">Check in</button></td>
+        <td>{{guest.name}}</td><td>{{guest.roomInfo.roomNo}}</td><td>{{guest.roomInfo.roomType}}</td><td>{{guest.phone}}</td><td>{{guest.email}}</td><td><span>&#8358;</span>{{formatPrice(guest.roomInfo.roomPrice)}}</td><td>{{guest.paymentType}}</td><td>{{formatD(guest.checkInTime)}}</td><td>{{formatD(guest.checkOutTime)}}</td><td><button type="button" class="btn btn-danger" (click)="cancelBooking(guest)">Cancel booking</button> <button class="btn btn-primary" (click)="checkInGuestMethod(guest)">Check in</button></td>
       </tr>
     </tbody>
   </table>
@@ -65,18 +68,18 @@
       </div>
       <div class="card-body">
         <div class="row">
-            <div class="form-group col-6">
+            <div class="form-group col-lg-6 col-md-6 col-sm-12">
                 <input type="text" placeholder="name" class="form-control" formControlName="name" >
               </div>
-              <div class="form-group col-6">
+              <div class="form-group col-lg-6 col-md-6 col-sm-12">
                 <input type="number" placeholder="Phone" class="form-control" formControlName="phone">
               </div>
         </div>
         <div class="row">
-            <div class=" col-6">
+            <div class=" col-lg-6 col-md-6 col-sm-12">
                 <input type="text" placeholder="Email" class="form-control" formControlName="email">
               </div>
-              <div class="form-group col-6">
+              <div class="form-group col-lg-6 col-md-6 col-sm-12">
                   <mat-form-field>
                       <mat-label>Payment type</mat-label>
                       <mat-select formControlName = "paymentType">
@@ -89,27 +92,30 @@
               </div>
         </div>
         <div class="row">
-            <div class=" col-6">
+            <div class=" col-lg-6 col-md-6 col-sm-12">
               <mat-form-field>
                   <mat-label>Available rooms</mat-label>
                   <mat-select formControlName = "room" >
                     <mat-option *ngFor="let room of emptyRooms" [value]="room" >
-                      {{room.roomNo}} | {{room.roomType}} | {{room.roomPrice}}
+                      {{room.roomNo}} | {{room.roomType}} 
                     </mat-option>
                   </mat-select>
               </mat-form-field>
             </div>
-              <div class="form-group col-6">
-                <!-- <datetime-popup formControlName="checkInTime" [closeButton]="myCloseOptions"></datetime-popup> -->
-                <input type="datetime-local" placeholder="Checkin time" class="form-control" value="2019-01-01, 01:0100" formControlName="checkInTime">
-              </div>
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <input type="number" placeholder="Set room price" formControlName="roomPrice" class="form-control">
+            </div>
               
         </div>
         <div class="row">
-            <div class="form-group col-6">
-                <input type="datetime-local" placeholder="Checkout time" class="form-control" formControlName="checkOutTime">
+            <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                <!-- <datetime-popup formControlName="checkInTime" [closeButton]="myCloseOptions"></datetime-popup> -->
+                <input type="text" onfocus="(this.type = 'datetime-local')" onblur="(this.type='text')" placeholder="Checkin time" class="form-control" formControlName="checkInTime">
+              </div>
+            <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                <input type="text" placeholder="Checkout time" class="form-control" onblur="(this.type='text')" onfocus="(this.type = 'datetime-local')" formControlName="checkOutTime">
             </div>
-            <div class="col-6">
+            <div class="col-lg-6 col-md-6 col-sm-12">
               <mat-form-field>
                   <mat-label>Type</mat-label>
                   <mat-select formControlName = "status">
@@ -119,7 +125,7 @@
               </mat-form-field>
             </div>
         </div>
-        <button class="btn btn-primary pull-right" [disabled]="guestForm.invalid" type="submit">Save guest</button>
+        <button class="btn btn-primary pull-right" [disabled]="!guestForm.valid" type="submit">Save guest</button>
       </div>
     </div>
   </form>

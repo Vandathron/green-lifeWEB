@@ -23,6 +23,10 @@ export class OrderService {
   deleteItem(itemID){
     return this.fireStore.collection("items").doc(itemID).delete();
   }
+
+  updateStaffSale(staffID, data){
+    return this.fireStore.collection("staffs").doc(staffID).update(data);
+  }
   
   //Bar items
 
