@@ -8,7 +8,6 @@ import { map } from 'rxjs/operators';
 import { GuestService } from '../../services/guest.service';
 import { formatDate } from '@angular/common';
 import { ReportService } from '../../services/report.service';
-import { firestore } from 'firebase';
 import * as numeral from 'numeral';
 
 

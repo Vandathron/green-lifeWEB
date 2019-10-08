@@ -28,6 +28,7 @@ export class DashboardComponent implements OnInit {
     private staffService: StaffService
   ) { 
     this.getStaffSales();
+    this.getRooms();
    }
 
   ngOnInit() {
@@ -50,13 +51,13 @@ export class DashboardComponent implements OnInit {
       const staffData = staff.payload.doc.data();
       switch(staffData.department){
         case "restaurant":
-          this.cardData.restaurantSales += staffData.totalSale
+          this.cardData.restaurantSales += staffData.totalSale? staffData.totalSale: 0;
         break;
         case "bar":
-          this.cardData.barSales += staffData.totalSale;
+          this.cardData.barSales += staffData.totalSale? staffData.totalSale: 0;
         break;
         case "reception":
-          this.cardData.recepSales += staffData.totalSale;
+          this.cardData.recepSales += staffData.totalSale? staffData.totalSale: 0;
         break;
         default:
           console.log("Admin not recorded!");
@@ -67,5 +68,14 @@ export class DashboardComponent implements OnInit {
     return numeral(price).format(dropDecimals ? '0,0' : '0,0.00');
   }
 
+  getRooms(){
+    this.roomService.getRooms().pipe(
+      map( rooms => {
+        rooms.docs.forEach( room => {
+          room.data().status == "available"? this.cardData.availableRooms++: room.data().status == "booked"? this.cardData.bookings++: this.cardData.checkIns++;
+        })
+      })
+    ).subscribe();
+  }
 
 }

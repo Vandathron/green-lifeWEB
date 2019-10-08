@@ -36,6 +36,9 @@ export class RoomService {
   queryRoom(field: string, value: string){
     return this.fireDB.firestore.collection("rooms").where(field, '==', value).get();
   }
+  deleteRoom(roomID){
+    return this.fireDB.collection("rooms").doc(roomID).delete();
+  }
 
   
 }

@@ -1,5 +1,8 @@
+<div class="overlay" *ngIf="loading">
+  <mat-progress-spinner class="spinner" [mode]="'indeterminate'" [color]="'#a7ef8a'" ></mat-progress-spinner>
+</div>
 <div class="limiter">
-		<div class="container-login100" style="background-image: url('../../assets/img/andela.jpg');">
+		<div class="container-login100" style="background-image: url('../../assets/img/architecture-3857634_1280.jpg');">
 			<div class="wrap-login100 p-t-30 p-b-50">
         <div class="row align-content-center mb-4">
           <img src="../../assets/img/company-logo.png">
@@ -9,7 +12,7 @@
 				</span>
 				<div class="container mt-3">
           <div class="row text-center text-big">
-            <p class="text-danger" *ngIf="loginError">{{errorMsg}}</p>
+            <p class="text-danger text-center font-size-2" *ngIf="loginError">{{errorMsg}}</p>
           </div>
           <div class="row">
             <div class="col-12">

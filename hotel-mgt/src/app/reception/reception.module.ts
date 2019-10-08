@@ -27,6 +27,7 @@ import { RecepReportComponent } from './recep-report/recep-report.component';
     
     
     ReceptionRoutingModule
-  ]
+  ],
+  exports: [RecepReportComponent]
 })
 export class ReceptionModule { }

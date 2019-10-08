@@ -61,4 +61,25 @@ export class ReportComponent implements OnInit {
     return numeral(price).format(dropDecimals ? '0,0' : '0,0.00');
   }
 
+  printReport(){
+    var divToPrint = document.getElementById('daily-report');
+    var htmlToPrint = '' +
+        '<style type="text/css">' +
+        'table th {' +
+        'padding:0.5em;' +
+        'text-align: center;'+
+        'border: 1px solid #000;'+
+        '}' +
+        'table {'+
+          'width: 100%;'+
+          'border: 1px solid #000;'+
+          '}'+
+        '</style>';
+    htmlToPrint = htmlToPrint+ divToPrint.outerHTML;
+    let newWin = window.open("");
+    newWin.document.write(htmlToPrint);
+    newWin.print();
+    newWin.close();
+  }
+
 }

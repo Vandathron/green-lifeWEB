@@ -42,6 +42,7 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
 import {  AngularFirestoreModule } from "@angular/fire/firestore";
 import { StaffService } from "./services/staff.service";
 import { SharedModule } from "./shared/shared.module";
+import { RoutesGuard } from "./AuthGuards/routes.guard";
 
 
 
@@ -93,7 +94,8 @@ import { SharedModule } from "./shared/shared.module";
     Title,
     AppService,
     AuthService,
-    StaffService
+    StaffService,
+    RoutesGuard
   ],
 
   bootstrap: [

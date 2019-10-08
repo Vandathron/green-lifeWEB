@@ -28,7 +28,6 @@ export class StaffService {
         phone: staff.phone,
         email: staff.email,
         username: staff.username,
-        password: staff.password
       })
     })
   }

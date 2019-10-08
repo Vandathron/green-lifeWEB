@@ -2,22 +2,22 @@
   <!-- Inner -->
   <div class="sidenav-inner" style="background-color:#a7ef8a; color: black;" [ngClass]="{ 'py-1': orientation !== 'horizontal' }">
       <sidenav-router-link icon="fa fa-tachometer" route="/v/admin/dashboard" [active]="isActive('/layout')">Admin</sidenav-router-link>
-    <sidenav-menu icon="fa fa-id-card" text="Admin">
+    <sidenav-menu icon="fas fa-user-shield" text="Admin">
       <sidenav-router-link route="/v/admin/staffs" [active]="isActive('staff')">Staffs</sidenav-router-link>
-      <sidenav-router-link route="/layout/roles" [active]="isActive('roles')">Reports</sidenav-router-link>
+      <sidenav-router-link route="/v/admin/reports" [active]="isActive('roles')">Reports</sidenav-router-link>
     </sidenav-menu>
 
-    <sidenav-menu icon="fa fa-gift" text="Restaurant">
+    <sidenav-menu icon="fas fa-utensils" text="Restaurant">
         <sidenav-router-link route="/v/restaurant/rest-pos" [active]="isActive('staff')">POS/Orders</sidenav-router-link>
         <sidenav-router-link route="/v/restaurant/report" [active]="isActive('rest-report')">My report</sidenav-router-link>
     </sidenav-menu>
-    <sidenav-menu icon="fa fa-truck" text="Reception">
+    <sidenav-menu icon="fa fa-home" text="Reception">
         <sidenav-router-link route="/v/reception/guests">Guests</sidenav-router-link> 
       <!-- <sidenav-router-link route="/v/reception/bookings" [active]="isActive('bookings')">Bookings</sidenav-router-link> -->
       <sidenav-router-link route="/v/reception/rooms" [active]="isActive('rooms')">Rooms</sidenav-router-link>
       <sidenav-router-link route="/v/reception/report" [active]="isActive('recep-report')">My report</sidenav-router-link>
     </sidenav-menu>
-    <sidenav-menu icon="fa fa-bar-chart" text="Bar">
+    <sidenav-menu icon="fas fa-wine-glass" text="Bar">
       <sidenav-router-link route="/v/bar/bar-pos" [active]="isActive('bar-pos')">POS/Orders</sidenav-router-link>
       <sidenav-router-link route="/v/bar/report" [active]="isActive('bar-report')">My report</sidenav-router-link>
     </sidenav-menu>

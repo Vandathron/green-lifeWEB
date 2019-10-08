@@ -58,10 +58,19 @@ export class RoomsComponent implements OnInit {
 
   ngOnInit() {
   }
+
+  deleteRoom(room){
+    this.loading = true;
+    this.roomService.deleteRoom(room.id).then(suc => {
+      this.getRooms();
+    }).catch(err => this.loading = false)
+  }
   saveRoom(){
     this.room.addControl('roomType', this.fb.control(this.selectedRoomType));
     this.roomService.saveRoom(this.room.value)
     .then(cb => {
+      this.room.removeControl('roomType');
+      this.closeModal();
       this.getRooms();
       console.log(cb.id + "=> " + "Saved successfully");
     }).catch(err => console.log("Error save", err));
@@ -90,11 +99,11 @@ export class RoomsComponent implements OnInit {
     this.loading = true;
     this.guestService.getGuests().then(
       guests => {
-        guests.docs.map(doc => this.sortRooms(doc.data()))
+        guests.docs.map(doc => {const d = doc.data(); d.id = doc.id;this.sortRooms(d)})
       this.loading = false;
       }
-    )
-    this.roomService.queryRoom("status", "available").then(docs => docs.forEach(doc => this.emptyRooms.push(doc.data())))
+    ).catch(err => this.loading = false)
+    this.roomService.queryRoom("status", "available").then(docs => docs.forEach(doc =>{ const d = doc.data(); d.id = doc.id; this.emptyRooms.push(d)}))
   }
 
   sortRooms(guest){

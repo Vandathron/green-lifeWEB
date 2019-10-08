@@ -8,7 +8,7 @@ import { IGuest } from '../../models/guest';
 import { GuestService } from '../../services/guest.service';
 import { ReportService } from '../../services/report.service';
 // import { AngularFirestore,   AngularFirestoreCollection } from '@angular/fire/firestore';
-import { firestore } from 'firebase';
+import  * as firebase from 'firebase/app';
 import { isUndefined } from 'util';
 import * as numeral from 'numeral';
 
@@ -151,18 +151,19 @@ export class OrdersComponent implements OnInit {
           date: new Date()
         }
         this.reportService.setReport(report, this.selectedGuest.value.id).subscribe(cb => {
+          
           console.log("successful!")
           this.orderService.updateStaffSale(this.loggedInUser.id, {
-            totalSale: firestore.FieldValue.increment(this.totalValue)
-          }).then(cb => console.log("Successfully updated"))
+            totalSale: firebase.firestore.FieldValue.increment(this.totalValue)
+          }).then(cb => this.printGuestOrder())
           this.orderIsProcesssed = false;
 
           //When above is successful, update guest balance
           this.guestService.updateGuest(this.selectedGuest.value.id, {
-            paidBill: firestore.FieldValue.increment(this.isBillPlaced? 0: this.totalValue),
-            totalBill: firestore.FieldValue.increment(this.totalValue),
-            restaurantBill:  firestore.FieldValue.increment(this.orderType == "restaurant"?this.totalValue: 0),
-            barBill: firestore.FieldValue.increment(this.orderType == "bar"? this.totalValue: 0)
+            paidBill: firebase.firestore.FieldValue.increment(this.isBillPlaced? 0: this.totalValue),
+            totalBill: firebase.firestore.FieldValue.increment(this.totalValue),
+            restaurantBill:  firebase.firestore.FieldValue.increment(this.orderType == "restaurant"?this.totalValue: 0),
+            barBill: firebase.firestore.FieldValue.increment(this.orderType == "bar"? this.totalValue: 0)
           })
           
           .then(onUpdated => this.reset()).catch(onErro => console.log(onErro));
@@ -189,6 +190,28 @@ export class OrdersComponent implements OnInit {
   }
   formatPrice(price, dropDecimals = false) {
     return numeral(price).format(dropDecimals ? '0,0' : '0,0.00');
+  }
+
+  printGuestOrder(){
+    var divToPrint = document.getElementById('order');
+    var htmlToPrint = '' +
+        '<style type="text/css">' +
+        'table th {' +
+        'padding:0.5em;' +
+        'text-align: center;'+
+        'border: 1px solid #000;'+
+        '}' +
+        'table {'+
+          'width: 50%;'+
+          'border: 1px solid #000;'+
+          '}'+
+        '</style>';
+    htmlToPrint = htmlToPrint+ divToPrint.outerHTML;
+    let newWin = window.open("");
+    newWin.document.write(htmlToPrint);
+    newWin.print();
+    newWin.close();
+    
   }
 
 

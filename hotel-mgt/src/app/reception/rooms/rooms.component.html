@@ -41,7 +41,7 @@
     <h3 class="col-12 text-dark font-size-2">Empty rooms</h3>
         <div class="col-lg-3 col-md-4 col-sm-6 card border-0 p-0 mr-lg-1 mr-sm-0  mb-3 shadow rounded bg-light" *ngFor="let room of emptyRooms" >
             <div class="card-header text-dark p-0 border-0 empty">
-              <span class="ml-1">Room {{room.roomNo}}</span>
+              <span class="ml-1">Room {{room.roomNo}}</span><i class="mr-1 pull-right text-danger fa fa-trash fa-2x cursor-pointer" (click)="deleteRoom(room)"></i>
             </div>
             <div class="card-body text-center text-dark empty">
               <i class="fa fa-user-circle fa-2x"></i><span class="name">Available</span>

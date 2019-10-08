@@ -13,6 +13,7 @@ import { NouisliderModule } from 'ng2-nouislider';
 import { Ng2DropdownModule } from 'ng2-material-dropdown';
 import { ReportsComponent } from './reports/reports.component';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { ReceptionModule } from '../reception/reception.module';
 
 @NgModule({
   declarations: [DashboardComponent, StaffComponent, ReportsComponent],
@@ -21,6 +22,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
     AngularmaterialModule,
     ReactiveFormsModule,
     FormsModule,
+    ReceptionModule,
     AdminRoutingModule,
     NgbModule,
     AngularFirestoreModule,

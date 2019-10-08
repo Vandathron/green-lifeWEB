@@ -2,7 +2,15 @@
   Reports
 </h4>
 
-<div class="table-responsive">
+<div class="overlay" *ngIf="loading">
+  <mat-progress-spinner class="spinner" [mode]="'indeterminate'" [color]="'#a7ef8a'" ></mat-progress-spinner>
+</div>
+
+<ng-select [items]="queries" placeholder = "Filter report" bindLabel = "name" (change) ="filterReport($event)">
+
+</ng-select>
+<button class="pull-right mr-1 btn btn-primary" (click) = "printReport('sumrep')">Print</button>
+<div class="table-responsive" id="sumrep">
   <table class="table table-dark table-hover">
     <thead>
       <tr>
@@ -77,6 +85,7 @@
                     <tr *ngFor="let bar of guestRestaurantReport">
                       <td><i *ngFor="let item of bar.items">{{item.itemName}}-<span>&#8358;</span>{{formatPrice(item.itemPrice)}},</i></td><td><span>&#8358;</span>{{formatPrice(bar.totalPrice)}}</td><td>{{bar.date.seconds| date: 'dd MMM yy hh:mm a'}}</td>
                     </tr>
+
                   </tbody>
               </table>
         </div>
@@ -84,7 +93,7 @@
       </div>
       <div class="row">
       <div class="col">
-        <button class="pull-right btn btn-danger" (click)="printReport()">Print</button>
+        <button class="pull-right btn btn-danger" (click)="printReport('report')">Print</button>
       </div>
       </div>
   </div>

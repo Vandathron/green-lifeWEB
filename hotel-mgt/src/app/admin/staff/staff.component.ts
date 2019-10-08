@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as numeral from 'numeral';
+import { FirebaseError } from 'firebase';
 
 @Component({
   selector: 'app-staff',
@@ -20,6 +21,8 @@ export class StaffComponent implements OnInit {
   ];
   loading: boolean = false;
   iconLoaded: boolean = false;
+  emailAlreadyInUse: boolean = false;
+  initialStaffTotalSale = 0;
 
 
   staffs: IUser[] = [];
@@ -32,7 +35,6 @@ export class StaffComponent implements OnInit {
     email: ['', [Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     phone: [null, [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
-    totalSale: [0]
   })
 
   constructor(
@@ -50,19 +52,26 @@ export class StaffComponent implements OnInit {
 
 
   openModal(content, options, data?){
+    this.staffForm.addControl("totalSale", this.fb.control(0));
     this.selectedStaff = data;
     this.modalService.open(content, {size: 'lg', backdrop: true, centered: true})
   }
 
   addStaff(){
     this.loading = true;
-    this.staffForm.addControl('department', this.fb.control(this.selectedDepartment))
+    this.staffForm.patchValue({totalSale: 0});
+    console.log(this.staffForm.value);
+    this.staffForm.addControl('department', this.fb.control(this.selectedDepartment));
     this.staffService.saveStaff(this.staffForm.value)
     .then(suc => {
+      this.staffForm.removeControl("totalSale");
       this.modalService.dismissAll();
       this.staffForm.removeControl('department');
       this.staffForm.reset();
       this.getStaffs();
+    }).catch((err: FirebaseError) => {
+      err.code == "auth/email-already-in-use"? this.emailAlreadyInUse = true: "";
+      this.loading = false;
     })
   }
   getStaffs(){
@@ -79,19 +88,6 @@ export class StaffComponent implements OnInit {
     ).subscribe(data => {this.loading = false;this.iconLoaded = true});
   }
 
-
-  deleteStaff(){
-    this.authService.deleteUser(this.selectedStaff.email, this.selectedStaff.password).then(
-      staff => {
-        staff.user.delete().then(res => {
-          this.staffService.deleteStaff(this.selectedStaff.id).then(res => {
-            this.getStaffs();
-            this.closeModal();
-          })
-        })
-      }
-    )
-  }
   closeModal(){
     this.modalService.dismissAll();
   }

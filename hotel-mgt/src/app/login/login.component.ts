@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   password: string = "";
   errorMsg: string = "";
   loginError: boolean = false;
+  loading: boolean = false;
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -27,10 +28,12 @@ export class LoginComponent implements OnInit {
   }
 
   login(){  
+    this.loading = true;
     var loggedInStaff;
     this.loginError = false;
     this.authService.login(this.username, this.password)
     .then(success => { 
+      this.loading = false;
        this.fireDB.collection('staffs').doc(success.user.uid).get()
        .subscribe(data => {
          loggedInStaff = data.data() as IUser;
@@ -53,6 +56,7 @@ export class LoginComponent implements OnInit {
        })
       
     }).catch((err: FirebaseError) => {
+      this.loading = false;
       if(err.code == "auth/user-not-found"){
         this.errorMsg = "This user does not exist";
         this.loginError = true;

@@ -61,21 +61,19 @@
 <ng-template #deleteStaf let-c = "close" let-d = "dismiss">
   <div class="row">
     <div class="col-12 text-center p-5 text-big text-capitalize">
-      Are you sure?
+      Please contact the admin
     </div>
   </div>
   <div class="row">
     <div class="col-6">
-      <button type="button" (click)="deleteStaff()" class="btn btn-danger">Delete</button>
-    </div>
-    <div class="col-6">
-      <button type="button" (click)="closeModal()" class="btn btn-danger">Cancel</button>
+      <button type="button" (click)="closeModal()" class="btn btn-danger">OK</button>
     </div>
   </div>
 </ng-template>
 
 <!-- Add staff modals -->
 <ng-template #newStaff let-c="close" let-d="dismiss">
+  <p class="error-message" *ngIf="emailAlreadyInUse">Email already in Use</p>
   <form [formGroup] = "staffForm" (ngSubmit) = "addStaff()">
       <div class="card">
           <div class="card-header">
@@ -107,7 +105,6 @@
           <div class="form-group">
               <input type="number" placeholder="Phone number" class="form-control" formControlName="phone">
             </div>
-            <input type="number" value="0" formControlName = "totalSale" hidden>
         </div>
         <div class="card-footer">
           <button class="btn green pull-right" type="submit" [disabled]="staffForm.invalid">

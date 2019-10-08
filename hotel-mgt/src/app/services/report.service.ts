@@ -74,4 +74,8 @@ export class ReportService {
     return this.fireDB.collection("reports").doc(guestID).get();
   }
 
+  queryReportByType(value){
+    return this.fireDB.firestore.collection("guests").where("status", "==", value).get();
+  }
+
 }

@@ -51,9 +51,9 @@
       </div>
     </div>
 
-    <div class="col-lg-4 border border-1 table-responsive">
+    <div class="col-lg-4 border border-1 table-responsive " id="order">
       <div class="container p-3 text-center">
-      Order by {{orderIsByGuest && selectedGuest.value? selectedGuest.value.name +" in room "+selectedGuest.value.roomNo : ""}}
+      Order by {{selectedGuest.value? selectedGuest.value.name +" in room "+selectedGuest.value.roomNo : ""}}
     </div>
       <table class="table-borderless table">
         <thead>
@@ -76,7 +76,7 @@
     </div>
   </div>
 
-    <div class="table-responsive mt-4">
+    <div class="table-responsive mt-4" >
       <table class="table table-hover table-dark">
         <thead>
           <tr>
