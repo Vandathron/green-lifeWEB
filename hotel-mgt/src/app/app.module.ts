@@ -43,6 +43,7 @@ import {  AngularFirestoreModule } from "@angular/fire/firestore";
 import { StaffService } from "./services/staff.service";
 import { SharedModule } from "./shared/shared.module";
 import { RoutesGuard } from "./AuthGuards/routes.guard";
+import { FilterPipe } from "./filter.pipe";
 
 
 
@@ -53,6 +54,7 @@ import { RoutesGuard } from "./AuthGuards/routes.guard";
   declarations: [
     AppComponent,
     LoginComponent,
+    FilterPipe
     // Pages
 
   ],

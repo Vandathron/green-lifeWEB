@@ -6,18 +6,20 @@ import { AngularmaterialModule } from '../material/angularmaterial/angularmateri
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { CustomDaterangePickerComponent } from './custom-daterange-picker/custom-daterange-picker.component';
 
 
 
 @NgModule({
-  declarations: [OrdersComponent, ReportComponent],
+  declarations: [OrdersComponent, ReportComponent, CustomDaterangePickerComponent],
   imports: [
     CommonModule,
     AngularmaterialModule,
     ReactiveFormsModule,
     FormsModule,
     NgSelectModule,
-    NgbModule
+    NgbModule,
+  
   
   ],exports:[
     OrdersComponent,

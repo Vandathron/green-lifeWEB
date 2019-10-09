@@ -8,6 +8,10 @@
 .mat-progress-spinner circle, .mat-spinner circle {
   stroke: #a7ef8a;
   }
+  .mat-progress-spinner{
+  margin: 50vh auto;
+
+  }
 @mixin keyframes($name) {
   @-webkit-keyframes #{$name} {
     @content;

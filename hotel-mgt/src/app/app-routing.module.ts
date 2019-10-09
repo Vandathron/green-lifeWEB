@@ -20,16 +20,16 @@ import { LoginComponent } from './login/login.component';
 const routes: Routes = [
 { path: 'v', component: Layout1Component, children:[
   {
-    path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+    path: 'admin', loadChildren: "./admin/admin.module#AdminModule"
   },
   {
-    path: 'restaurant', loadChildren: () => import('./restaurant/restaurant.module').then(res => res.RestaurantModule)
+    path: 'restaurant', loadChildren: "./restaurant/restaurant.module#RestaurantModule"
   },
   {
-    path: 'reception', loadChildren: () => import('./reception/reception.module').then(r => r.ReceptionModule)
+    path: 'reception', loadChildren: './reception/reception.module#ReceptionModule'
   },
   {
-    path: 'bar', loadChildren: () => import('./bar/bar.module').then(bar => bar.BarModule)
+    path: 'bar', loadChildren: "./bar/bar.module#BarModule"
   }
 ],
 },

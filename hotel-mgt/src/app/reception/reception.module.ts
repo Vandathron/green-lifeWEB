@@ -10,11 +10,10 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AngularmaterialModule } from '../material/angularmaterial/angularmaterial.module';
 import { RoomsComponent } from './rooms/rooms.component';
-import { BookingComponent } from './booking/booking.component';
 import { RecepReportComponent } from './recep-report/recep-report.component';
 
 @NgModule({
-  declarations: [GuestComponent, RoomsComponent, BookingComponent, RecepReportComponent],
+  declarations: [GuestComponent, RoomsComponent, RecepReportComponent],
   imports: [
     CommonModule,
     NgbModule,
